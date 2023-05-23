@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -21,16 +22,18 @@ public class LoginController {
         return "/Login/Login";
     }
 
-    @PostMapping("/validate")
-    public String validateCredentials(@RequestParam("username") String username,
-                                      @RequestParam("password") String password) {
-        boolean isValidCredentials = service.verifyCredentials(username, password);
-        if (isValidCredentials) {
-            // Authentication successful
+    @PostMapping("/login")
+    public String login(@ModelAttribute(name = "loginForm") Utilizador login, Model model) {
+        String username = login.getUsername();
+        String password = login.getPassword();
+
+        if (service.verifyCredentials(username, password)) {
+            model.addAttribute("username", username);
+            model.addAttribute("password", password);
             return "redirect:/Home";
         } else {
-            // Authentication failed
-            return "redirect:/Login/Login";
+            model.addAttribute("error", "Incorrect username or password");
+            return "redirect:/Login?error";
         }
     }
 }

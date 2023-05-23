@@ -37,7 +37,7 @@ public class UtilizadorService {
     public boolean verifyCredentials(String username, String password) {
         Utilizador user = utilizadorRepository.findByUsername(username);
 
-        if (user != null && user.getPassword().equals(password)) {
+        if (user != null && user.getPassword().equals(password) && user.getIdtipoutilizador() == 3) {
             return true;
         }
 
