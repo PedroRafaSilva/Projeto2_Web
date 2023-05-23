@@ -34,4 +34,14 @@ public class UtilizadorService {
         utilizadorRepository.deleteById(id);
     }
 
+    public boolean verifyCredentials(String username, String password) {
+        Utilizador user = utilizadorRepository.findByUsername(username);
+
+        if (user != null && user.getPassword().equals(password)) {
+            return true;
+        }
+
+        return false;
+    }
+
 }
