@@ -34,6 +34,10 @@ public class UtilizadorService {
         utilizadorRepository.deleteById(id);
     }
 
+    public Utilizador findByUsername(String username){
+        return utilizadorRepository.findByUsername(username);
+    }
+
     public boolean verifyCredentials(String username, String password) {
         Utilizador user = utilizadorRepository.findByUsername(username);
 
@@ -43,5 +47,33 @@ public class UtilizadorService {
 
         return false;
     }
+
+    public String validateUser(Utilizador utilizador){
+        boolean hasLettters = false;
+
+
+        if (!utilizador.getEmail().contains("@") || !utilizador.getEmail().contains(".com"))  {
+            return "O email deve ser do tipo: joao@algo.com!";
+        }
+
+       if (utilizador.getTelefone().length() > 9 || utilizador.getTelefone().length() < 9){
+            return "O número de telefone apenas deve ter 9 números!";
+        }
+
+        if (utilizador.getNif() > 1000000000 || utilizador.getNif() < 1000000) {
+            return "O NIF deve ter no máximo 10 números!";
+        }
+
+        if (utilizador.getCpostal().length() < 7 || !utilizador.getCpostal().equals(utilizador.getCpostal().substring(0, 4) + "-" + utilizador.getCpostal().substring(5))) {
+            return "O codígo de Postal deve ser do tipo: 1234-123.";
+        }
+
+        if (findByUsername(utilizador.getUsername()) != null || verifyCredentials(utilizador.getUsername(), utilizador.getPassword())) {
+                return "Escolha outro username ou palavra-passe.";
+        }
+
+        return "OK";
+    }
+
 
 }
