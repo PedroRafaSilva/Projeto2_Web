@@ -33,4 +33,8 @@ public class AgendamentoService {
         agendamentoRepository.deleteById(id);
     }
 
+    public List<Agendamento> findAgendamentosByUtilizador(int id){
+        return agendamentoRepository.findAgendamentosByIdutilizador(id);
+    }
+
 }

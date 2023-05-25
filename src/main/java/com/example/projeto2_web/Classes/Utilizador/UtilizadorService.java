@@ -22,8 +22,12 @@ public class UtilizadorService {
         return utilizadorRepository.findAll();
     }
 
-    public Optional<Utilizador> getUtilizadorById(int id) {
-        return utilizadorRepository.findById(id);
+    public Utilizador getUtilizadorById(int id) {
+        if (utilizadorRepository.findById(id).isPresent()) {
+            return utilizadorRepository.findById(id).get();
+        } else {
+           return null;
+        }
     }
 
     public Utilizador updateUtilizador(Utilizador utilizador) {

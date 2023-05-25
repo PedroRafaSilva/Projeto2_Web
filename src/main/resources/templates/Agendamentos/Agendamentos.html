@@ -76,18 +76,11 @@
         }
         body{
             display: flex;
-            align-items: center;
+            align-items: start;
             padding: 0 10px;
             justify-content: center;
             min-height: 100vh;
             background: #ffffff;
-        }
-        .wrapper{
-            height: 500px;
-            width: 800px;
-            background: #fff;
-            border-radius: 10px;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.12);
         }
         .wrapper header{
             display: flex;
@@ -120,15 +113,6 @@
             background: #f2f2f2;
         }
 
-        header .current-date{
-            font-size: 1.45rem;
-            font-weight: 500;
-        }
-
-        .calendar{
-            padding: 20px;
-        }
-
         .calendar ul{
             display: flex;
             flex-wrap: wrap;
@@ -156,12 +140,6 @@
             position: relative;
             margin-top: 30px;
         }
-        .days li.inactive{
-            color: #aaa;
-        }
-        .days li.active{
-            color: #fff;
-        }
         .days li::before{
             position: absolute;
             content: "";
@@ -173,11 +151,12 @@
             border-radius: 50%;
             transform: translate(-50%, -50%);
         }
-        .days li.active::before{
-            background: #29296b;
+        th {
+            padding: 10px 30px;
+            text-align: center;
         }
-        .days li:not(.active):hover::before{
-            background: #f2f2f2;
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
         }
     </style>
 </head>
@@ -190,25 +169,25 @@
     </div>
     <ul>
         <li>
-            <a href="/Perfil" style="color: white;">
+            <a th:href="@{'/Perfil/' + ${id}}" style="color: white;">
                 <img src="https://img.icons8.com/FFFFFF/fluent-systems-filled/2x/guest-male.png" alt="Imagem 1">
                 <span class="hide-text">Meu Perfil</span>
             </a>
         </li>
         <li>
-            <a href="/Embarcacoes" style="color: white;">
+            <a th:href="@{'/Embarcacoes/' + ${id}}" style="color: white;">
                 <img src="https://img.icons8.com/FFFFFF/ios11/2x/dive-boat.png" alt="Imagem 2">
                 <span class="hide-text">As Minhas Embarcações</span>
             </a>
         </li>
         <li>
-            <a href="/Agendamentos" style="color: orange;">
+            <a th:href="@{'/Agendamentos/' + ${id}}" style="color: orange;">
                 <img src="https://img.icons8.com/F29D38/ios11/2x/overtime.png" alt="Imagem 3">
                 <span class="hide-text">Os Meus Agendamentos</span>
             </a>
         </li>
         <li>
-            <a href="/Faturas" style="color: white; margin-bottom: 400px;">
+            <a th:href="@{'/Faturas/' + ${id}}" style="color: white; margin-bottom: 400px;">
                 <img src="https://img.icons8.com/FFFFFF/win10/2x/invoice.png" alt="Imagem 4">
                 <span class="hide-text">As Minhas Faturas</span>
             </a>
@@ -221,87 +200,51 @@
         </li>
     </ul>
 </div>
-<h1 style="color: white">Os Meus Agendamentos</h1>
+
 <div class="content">
-
-    <div class="wrapper">
-        <header>
-            <p class="current-date"></p>
-            <div class="icons">
-                <span id="prev" class="material-symbols-rounded"> < </span>
-                <span id="next" class="material-symbols-rounded"> > </span>
-            </div>
-        </header>
-        <div class="calendar">
-            <ul class="weeks">
-                <li>Dom</li>
-                <li>Seg</li>
-                <li>Ter</li>
-                <li>Qua</li>
-                <li>Qui</li>
-                <li>Sex</li>
-                <li>Sab</li>
-            </ul>
-            <ul class="days"></ul>
-        </div>
-    </div>
-
+    <h1 class="text-center mb-5" style="margin-bottom: 100px" >Os Meus Agendamentos</h1>
+    <table class="table">
+        <thead>
+        <tr style="background-color: #29296b; color: orange">
+            <th>Data</th>
+            <th>Embarcação</th>
+            <th>Hora de Início</th>
+            <th>Hora de Fim</th>
+            <th>Extras</th>
+            <th>Valor dos Extras</th>
+            <th>Estado</th>
+            <th>Editar</th>
+            <th>Cancelar</th>
+        </tr>
+        </thead>
+        <tbody th:each="agendamento: ${agendamentos}">
+        <tr>
+            <td  th:text="${agendamento.data}"></td>
+            <td  th:text="${agendamento.embarcacaoByIdembarcacao.getNome()}"></td>
+            <td  th:text="${agendamento.horainicio}"></td>
+            <td  th:text="${agendamento.horafim}"></td>
+            <td >
+                <button class="btn btn-primary">Editar Extras</button>
+            </td>
+            <td  th:text="${agendamento.valorextras}"></td>
+            <td  th:text="${agendamento.getListaEstadoAgendamentosByIdagendamento()
+            [agendamento.getListaEstadoAgendamentosByIdagendamento().size()-1].getEstadoAgendamentoByIdestado().getEstado()}"></td>
+            <td >
+                <button class="btn btn-primary">Editar</button>
+            </td>
+            <td >
+                <button class="btn btn-danger">Cancelar</button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
 </div>
-
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
 <script>
     $(document).ready(function() {
         $('#toggleSidebar').click(function() {
             $('.sidebar').toggleClass('collapsed');
-        });
-    });
-
-    const daysTag = document.querySelector(".days"),
-        currentDate = document.querySelector(".current-date"),
-        prevNextIcon = document.querySelectorAll(".icons span");
-    // getting new date, current year and month
-    let date = new Date(),
-        currYear = date.getFullYear(),
-        currMonth = date.getMonth();
-    // storing full name of all months in array
-    const months = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho",
-        "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
-    const renderCalendar = () => {
-        let firstDayofMonth = new Date(currYear, currMonth, 1).getDay(), // getting first day of month
-            lastDateofMonth = new Date(currYear, currMonth + 1, 0).getDate(), // getting last date of month
-            lastDayofMonth = new Date(currYear, currMonth, lastDateofMonth).getDay(), // getting last day of month
-            lastDateofLastMonth = new Date(currYear, currMonth, 0).getDate(); // getting last date of previous month
-        let liTag = "";
-        for (let i = firstDayofMonth; i > 0; i--) { // creating li of previous month last days
-            liTag += `<li class="inactive">${lastDateofLastMonth - i + 1}</li>`;
-        }
-        for (let i = 1; i <= lastDateofMonth; i++) { // creating li of all days of current month
-            // adding active class to li if the current day, month, and year matched
-            let isToday = i === date.getDate() && currMonth === new Date().getMonth()
-            && currYear === new Date().getFullYear() ? "active" : "";
-            liTag += `<li class="${isToday}">${i}</li>`;
-        }
-        for (let i = lastDayofMonth; i < 6; i++) { // creating li of next month first days
-            liTag += `<li class="inactive">${i - lastDayofMonth + 1}</li>`
-        }
-        currentDate.innerText = `${months[currMonth]} ${currYear}`; // passing current mon and yr as currentDate text
-        daysTag.innerHTML = liTag;
-    }
-    renderCalendar();
-    prevNextIcon.forEach(icon => { // getting prev and next icons
-        icon.addEventListener("click", () => { // adding click event on both icons
-            // if clicked icon is previous icon then decrement current month by 1 else increment it by 1
-            currMonth = icon.id === "prev" ? currMonth - 1 : currMonth + 1;
-            if(currMonth < 0 || currMonth > 11) { // if current month is less than 0 or greater than 11
-                // creating a new date of current year & month and pass it as date value
-                date = new Date(currYear, currMonth, new Date().getDate());
-                currYear = date.getFullYear(); // updating current year with new date year
-                currMonth = date.getMonth(); // updating current month with new date month
-            } else {
-                date = new Date(); // pass the current date as date value
-            }
-            renderCalendar(); // calling renderCalendar function
         });
     });
 </script>
