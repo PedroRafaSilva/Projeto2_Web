@@ -1,5 +1,6 @@
 package com.example.projeto2_web.Classes.CodPostal;
 
+import com.example.projeto2_web.Classes.Utilizador.Utilizador;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,8 +23,12 @@ public class CodPostalService {
         return codPostalRepository.findAll();
     }
 
-    public Optional<CodPostal> getCodPostalById(String id) {
-        return codPostalRepository.findById(id);
+    public CodPostal getCodPostalById(String id) {
+        if (codPostalRepository.findById(id).isPresent()) {
+            return codPostalRepository.findById(id).get();
+        } else {
+            return null;
+        }
     }
 
     public CodPostal updateCodPostal(CodPostal codPostal) {

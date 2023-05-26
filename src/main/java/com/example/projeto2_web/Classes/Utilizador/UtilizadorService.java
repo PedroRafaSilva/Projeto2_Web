@@ -45,11 +45,7 @@ public class UtilizadorService {
     public boolean verifyCredentials(String username, String password) {
         Utilizador user = utilizadorRepository.findByUsername(username);
 
-        if (user != null && user.getPassword().equals(password) && user.getIdtipoutilizador() == 3) {
-            return true;
-        }
-
-        return false;
+        return user != null && user.getPassword().equals(password) && user.getIdtipoutilizador() == 3;
     }
 
     public String validateUser(Utilizador utilizador){
@@ -60,7 +56,7 @@ public class UtilizadorService {
             return "O email deve ser do tipo: joao@algo.com!";
         }
 
-       if (utilizador.getTelefone().length() > 9 || utilizador.getTelefone().length() < 9){
+       if (utilizador.getTelefone().length() != 9){
             return "O número de telefone apenas deve ter 9 números!";
         }
 
@@ -72,12 +68,14 @@ public class UtilizadorService {
             return "O codígo de Postal deve ser do tipo: 1234-123.";
         }
 
-        if (findByUsername(utilizador.getUsername()) != null || verifyCredentials(utilizador.getUsername(), utilizador.getPassword())) {
+        if (verifyCredentials(utilizador.getUsername(), utilizador.getPassword())) {
                 return "Escolha outro username ou palavra-passe.";
         }
 
         return "OK";
     }
+
+
 
 
 }

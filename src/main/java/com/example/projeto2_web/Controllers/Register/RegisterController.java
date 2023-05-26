@@ -29,8 +29,7 @@ public class RegisterController {
     public String validate(Utilizador utilizador, Model model, @RequestParam("cpostal") String codPostal, @RequestParam("localidade") String localidade) {
         String validation = service.validateUser(utilizador);
         if (validation.equals("OK")) {
-            System.out.println(codPostalService.getCodPostalById(codPostal));
-            if(!codPostalService.getCodPostalById(codPostal).isPresent()){
+            if(codPostalService.getCodPostalById(codPostal) != null){
                 CodPostal codPostal1 = new CodPostal();
                 codPostal1.setCpostal(codPostal);
                 codPostal1.setLocalidade(localidade);
