@@ -27,7 +27,7 @@ public class RegisterController {
 
     @PostMapping("/save")
     public String validate(Utilizador utilizador, Model model, @RequestParam("cpostal") String codPostal, @RequestParam("localidade") String localidade) {
-        String validation = service.validateUser(utilizador);
+        String validation = service.validateUser(utilizador, 0);
         if (validation.equals("OK")) {
             if(codPostalService.getCodPostalById(codPostal) != null){
                 CodPostal codPostal1 = new CodPostal();

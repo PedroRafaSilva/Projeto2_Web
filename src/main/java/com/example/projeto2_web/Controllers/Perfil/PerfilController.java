@@ -27,7 +27,7 @@ public class PerfilController {
 
     @PostMapping("/validate/{id}")
     public String validate(@PathVariable("id") Integer id, Utilizador utilizador, Model model, @ModelAttribute("codpostal") CodPostal codpostal) {
-        String validation = service.validateUser(utilizador);
+        String validation = service.validateUser(utilizador, id);
         if (validation.equals("OK")) {
             if(codpostal != null){
                 codPostalService.createCodPostal(codpostal);

@@ -48,7 +48,7 @@ public class UtilizadorService {
         return user != null && user.getPassword().equals(password) && user.getIdtipoutilizador() == 3;
     }
 
-    public String validateUser(Utilizador utilizador){
+    public String validateUser(Utilizador utilizador, int id){
         boolean hasLettters = false;
 
 
@@ -68,7 +68,8 @@ public class UtilizadorService {
             return "O codígo de Postal deve ser do tipo: 1234-123.";
         }
 
-        if (verifyCredentials(utilizador.getUsername(), utilizador.getPassword())) {
+        if(findByUsername(utilizador.getUsername()) != null && findByUsername(utilizador.getUsername()).getIdutilizador() != id)
+            if (!verifyCredentials(utilizador.getUsername(), utilizador.getPassword())) {
                 return "Escolha outro username ou palavra-passe.";
         }
 
