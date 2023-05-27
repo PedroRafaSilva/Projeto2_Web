@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Marinar - Gestão de Marinas</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
+    <style>
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            width: 500px; /* Alterada para largura mínima */
+            background-color: #29296b;
+            font-size: 30px;
+            padding: 20px;
+            transition: width 0.1s;
+        }
+
+        .sidebar.collapsed {
+            width: 100px;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar ul li {
+            margin-bottom: 10px;
+        }
+
+        .sidebar ul li a {
+            color: #000;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        .sidebar ul li img {
+            margin-right: 10px;
+            width: 60px;
+            height: 60px;
+        }
+
+        .sidebar .logo {
+            margin-bottom: 50px;
+        }
+
+        .sidebar .logo img {
+            max-width: 50px;
+            height: 50px;
+        }
+
+        .sidebar .logout {
+            position: absolute;
+            bottom: 0;
+        }
+
+        .content {
+            margin-left: 200px;
+            padding: 20px;
+        }
+
+        .sidebar.collapsed ul li span {
+            display: none;
+        }
+
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        body{
+            display: flex;
+            align-items: start;
+            padding: 0 10px;
+            justify-content: center;
+            min-height: 100vh;
+            background: #ffffff;
+        }
+        .wrapper header{
+            display: flex;
+            align-items: center;
+            padding: 25px 30px 10px;
+            justify-content: space-between;
+        }
+
+        header .icons span{
+            height: 38px;
+            width: 38px;
+            margin: 0 1px;
+            cursor: pointer;
+            color: #878787;
+            text-align: center;
+            line-height: 38px;
+            font-size: 1.9rem;
+            user-select: none;
+            border-radius: 50%;
+        }
+
+        .icons span:last-child{
+            margin-right: -10px;
+        }
+
+        header .icons span:hover{
+            background: #f2f2f2;
+        }
+        th {
+            padding: 10px 30px;
+            text-align: center;
+        }
+        tr {
+            margin-left: 30px;
+        }
+        .increased-column-spacing th,
+        .increased-column-spacing td {
+            padding-right: 100px; /* Ajusta o valor conforme necessário */
+        }
+    </style>
+</head>
+<body>
+<div class="sidebar collapsed"> <!-- Adicionada a classe collapsed -->
+    <div class="logo">
+        <button id="toggleSidebar" style="background: none; border: none; cursor: pointer;">
+            <img src="https://img.icons8.com/FFFFFF/ios_filled/2x/menu.png" alt="Logo">
+        </button>
+    </div>
+    <ul>
+        <li>
+            <a th:href="@{'/Perfil/' + ${id}}" style="color: white;">
+                <img src="https://img.icons8.com/FFFFFF/fluent-systems-filled/2x/guest-male.png" alt="Imagem 1">
+                <span class="hide-text">Meu Perfil</span>
+            </a>
+        </li>
+        <li>
+            <a th:href="@{'/Embarcacoes/' + ${id}}" style="color: orange;">
+                <img src="https://img.icons8.com/F29D38/ios11/2x/dive-boat.png" alt="Imagem 2">
+                <span class="hide-text">As Minhas Embarcações</span>
+            </a>
+        </li>
+        <li>
+            <a th:href="@{'/Agendamentos/' + ${id}}" style="color: white;">
+                <img src="https://img.icons8.com/FFFFFF/ios11/2x/overtime.png" alt="Imagem 3">
+                <span class="hide-text">Os Meus Agendamentos</span>
+            </a>
+        </li>
+        <li>
+            <a th:href="@{'/Faturas/' + ${id}}" style="color: white; margin-bottom: 400px;">
+                <img src="https://img.icons8.com/FFFFFF/win10/2x/invoice.png" alt="Imagem 4">
+                <span class="hide-text">As Minhas Faturas</span>
+            </a>
+        </li>
+        <li class="logout">
+            <a href="/Login" style="color: white;">
+                <img src="https://img.icons8.com/FFFFFF/m_outlined/2x/logout-rounded-left.png" alt="Imagem 5">
+                <span class="hide-text">LogOut</span>
+            </a>
+        </li>
+    </ul>
+</div>
+
+<div class="content">
+    <h1 class="text-center mb-1" style="margin-bottom: 10px; font-weight: bold" >As Minhas Embarcações</h1>
+    <button class="btn btn-primary" style="margin:0 0 20px 1250px; font-size: 20px; padding: 10px" data-toggle="modal" data-target="#newBoatModal">Nova Embarcação</button>
+    <table class="table increased-column-spacing"> <!-- Adicionado a classe CSS "increased-column-spacing" -->
+        <thead>
+        <tr style="background-color: #29296b; color: orange">
+            <th>Nome</th>
+            <th>Marina</th>
+            <th>Comprimento</th>
+            <th>Valor da Embarcação (€)</th>
+            <th>Editar/Ver Detalhes</th>
+            <th>Eliminar</th>
+        </tr>
+        </thead>
+        <tbody th:each="embarcacao: ${embarcacoes}">
+        <tr>
+            <td  th:text="${embarcacao.idembarcacao}"></td>
+            <td  th:text="${embarcacao.nome}"></td>
+            <td  th:text="${embarcacao.marinaByIdmarina.getNome()}"></td>
+            <td  th:text="${embarcacao.comprimentoByComprimento.getDescricao()}"></td>
+            <td  th:text="${embarcacao.comprimentoByComprimento.getValorcomprimento()}"></td>
+            <td >
+                <button class="btn btn-primary">Editar/Ver Detalhes</button>
+            </td>
+            <td >
+                <button class="btn btn-danger" data-toggle="modal" data-target="#confirmDeleteModal">Eliminar</button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- Modal para criar uma nova embarcação -->
+<div class="modal fade" id="newBoatModal" tabindex="-1" role="dialog" aria-labelledby="newBoatModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="newBoatModalLabel">Nova Embarcação</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form th:action="@{'/validateEmb/' + ${id}}" th:object="${embarcacao}" method="post">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="boatName">Nome da Embarcação:</label>
+                        <input type="text" class="form-control" id="boatName" th:field="*{nome}">
+                    </div>
+                    <div class="form-group">
+                        <label for="marinaName">Nome da Marina:</label>
+                        <select class="form-control" id="marinaName" th:field="*{idmarina}">
+                            <option th:each="marina : ${marinas}" th:value="${marina.idmarina}" th:text="${marina.nome}"></option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="boatLength">Comprimento:</label>
+                        <select class="form-control" id="boatLength" th:field="*{comprimento}">
+                            <option th:each="comprimento : ${comprimentos}" th:value="${comprimento.comprimento}" th:text="${comprimento.descricao}"></option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" id="confirmButton" class="btn btn-primary">Salvar</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal de confirmação de eliminação -->
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmDeleteModalLabel">Eliminar Embarcação</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Deseja realmente eliminar esta embarcação?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger" onclick="deleteBoat()">Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#toggleSidebar').click(function() {
+            $('.sidebar').toggleClass('collapsed');
+        });
+    });
+</script>
+<script>
+    document.getElementById("confirmButton").addEventListener("click", function() {
+        let id = [${id}]; // Obtém o valor do ID usando Thymeleaf
+        let formData = new FormData(document.getElementById("editForm"));
+        let request = new XMLHttpRequest();
+        request.open("POST", "/validateEmb/" + id); // URL da rota no servidor
+        request.send(formData);
+    });
+</script>
+<script>
+
+</script>
+</body>
+</html>

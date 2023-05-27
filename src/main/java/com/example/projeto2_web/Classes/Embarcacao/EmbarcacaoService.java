@@ -2,6 +2,7 @@ package com.example.projeto2_web.Classes.Embarcacao;
 
 import com.example.projeto2_web.Classes.Embarcacao.Embarcacao;
 import com.example.projeto2_web.Classes.Embarcacao.EmbarcacaoRepository;
+import com.example.projeto2_web.Classes.Utilizador.Utilizador;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,8 +24,12 @@ public class EmbarcacaoService {
         return embarcacaoRepository.findAll();
     }
 
-    public Optional<Embarcacao> getEmbarcacaoById(int id) {
-        return embarcacaoRepository.findById(id);
+    public Embarcacao getEmbarcacaoById(int id) {
+        if (embarcacaoRepository.findById(id).isPresent()) {
+            return embarcacaoRepository.findById(id).get();
+        } else {
+            return null;
+        }
     }
 
     public Embarcacao updateEmbarcacao(Embarcacao embarcacao) {
@@ -33,6 +38,10 @@ public class EmbarcacaoService {
 
     public void deleteEmbarcacao(int id) {
         embarcacaoRepository.deleteById(id);
+    }
+
+    public List<Embarcacao> findEmbarcacaosByUtilizadorByIdutilizadorOrderByNome(Utilizador utilizador){
+        return embarcacaoRepository.findEmbarcacaosByUtilizadorByIdutilizadorOrderByNome(utilizador);
     }
 
 }
