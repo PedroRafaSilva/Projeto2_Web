@@ -40,5 +40,24 @@ public class EmbarcacoesController {
         return "redirect:/Embarcacoes/{id}";
     }
 
+    @GetMapping("/deleteEmb/{id}")
+    public String deleteEmb(@PathVariable("id") Integer id, Integer idEmb) {
+        service.deleteEmbarcacao(idEmb);
+        return "redirect:/Embarcacoes/{id}";
+    }
+
+    @GetMapping("/findOne")
+    @ResponseBody
+    public Embarcacao findOne(Integer idEmb){
+        return service.getEmbarcacaoById(idEmb);
+    }
+
+    @PostMapping("/saveEmb/{id}")
+    public String save(@PathVariable("id") Integer id, Embarcacao idEmb){
+       service.updateEmbarcacao(idEmb);
+       return "redirect:/Embarcacoes/{id}";
+    }
+
+
 
 }

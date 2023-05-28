@@ -179,7 +179,6 @@
         </thead>
         <tbody th:each="embarcacao: ${embarcacoes}">
         <tr>
-            <td  th:text="${embarcacao.idembarcacao}"></td>
             <td  th:text="${embarcacao.nome}"></td>
             <td  th:text="${embarcacao.marinaByIdmarina.getNome()}"></td>
             <td  th:text="${embarcacao.comprimentoByComprimento.getDescricao()}"></td>
@@ -188,7 +187,7 @@
                 <button class="btn btn-primary">Editar/Ver Detalhes</button>
             </td>
             <td >
-                <button class="btn btn-danger" data-toggle="modal" data-target="#confirmDeleteModal">Eliminar</button>
+                <a class="btn btn-danger delBtn" data-toggle="modal" th:href="@{'/deleteEmb/' + ${id}(idEmb=${embarcacao.idembarcacao})}" data-target="#confirmDeleteModal">Eliminar</a>
             </td>
         </tr>
         </tbody>
@@ -234,7 +233,6 @@
     </div>
 </div>
 
-
 <!-- Modal de confirmação de eliminação -->
 <div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -250,7 +248,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-danger" onclick="deleteBoat()">Eliminar</button>
+                <a href="" type="button" id="deleteButton" class="btn btn-danger">Eliminar</a>
             </div>
         </div>
     </div>
@@ -272,6 +270,14 @@
         let request = new XMLHttpRequest();
         request.open("POST", "/validateEmb/" + id); // URL da rota no servidor
         request.send(formData);
+    });
+</script>
+<script>
+    $('.table .delBtn').on('click', function(event) {
+        event.preventDefault();
+        let href = $(this).attr('href');
+        $('#confirmDeleteModal #deleteButton').attr('href', href);
+        $('#confirmDeleteModal').modal();
     });
 </script>
 <script>
