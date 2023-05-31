@@ -1,7 +1,12 @@
 package com.example.projeto2_web.Classes.Agendamento;
 
+import com.example.projeto2_web.Classes.ListaEstadoAgendamento.ListaEstadoAgendamento;
+import com.example.projeto2_web.Classes.ListaEstadoAgendamento.ListaEstadoAgendamentoRepository;
+import com.example.projeto2_web.Classes.ListaEstadoAgendamento.ListaEstadoAgendamentoService;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,8 +38,8 @@ public class AgendamentoService {
         agendamentoRepository.deleteById(id);
     }
 
-    public List<Agendamento> findAgendamentosByUtilizador(int id){
-        return agendamentoRepository.findAgendamentosByIdutilizador(id);
+    public List<Agendamento> findAgendamentosByUtilizadorOrderByData(int id){
+        return agendamentoRepository.findAgendamentosByIdutilizadorOrderByData(id);
     }
 
 }

@@ -151,7 +151,7 @@
     }
   </style>
 </head>
-<body>
+<body style="background-color: #393f81; padding: 25px;">
 <div class="sidebar collapsed"> <!-- Adicionada a classe collapsed -->
   <div class="logo">
     <button id="toggleSidebar" style="background: none; border: none; cursor: pointer;">
@@ -191,7 +191,7 @@
     </li>
   </ul>
 </div>
-<div class="form-container">
+<div class="form-container" style="background-color: white; border-radius: 10px;">
     <form th:action="@{'/validate/' + ${id}}" th:object="${utilizador}" method="post">
       <div class="d-flex align-items-center mb-2 pb-1">
         <span class="h1 fw-bold mb-0" style="font-weight: bold">O Meu Perfil</span>

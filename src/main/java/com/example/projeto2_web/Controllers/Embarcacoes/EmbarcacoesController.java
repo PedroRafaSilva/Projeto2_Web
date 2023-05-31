@@ -52,9 +52,11 @@ public class EmbarcacoesController {
         return service.getEmbarcacaoById(idEmb);
     }
 
-    @PostMapping("/saveEmb/{id}")
-    public String save(@PathVariable("id") Integer id, Embarcacao idEmb){
-       service.updateEmbarcacao(idEmb);
+    @PostMapping("/saveEmb/{id}/{idEmb}")
+    public String save(@PathVariable("id") Integer id, @PathVariable("idEmb") Integer idEmb, Embarcacao Emb){
+        Emb.setIdembarcacao(idEmb);
+        Emb.setIdutilizador(id);
+       service.updateEmbarcacao(Emb);
        return "redirect:/Embarcacoes/{id}";
     }
 

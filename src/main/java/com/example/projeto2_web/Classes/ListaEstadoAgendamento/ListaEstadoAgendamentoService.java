@@ -27,4 +27,8 @@ public class ListaEstadoAgendamentoService {
     public void deleteListaEstadoAgendamento(ListaEstadoAgendamento listaEstadoAgendamento) {
         listaEstadoAgendamentoRepository.delete(listaEstadoAgendamento);
     }
+
+    public ListaEstadoAgendamento findEstadoByAgendamento(int id){
+        return listaEstadoAgendamentoRepository.findListaEstadoAgendamentoByIdagendamento(id).get(listaEstadoAgendamentoRepository.findListaEstadoAgendamentoByIdagendamento(id).size() - 1);
+    }
 }

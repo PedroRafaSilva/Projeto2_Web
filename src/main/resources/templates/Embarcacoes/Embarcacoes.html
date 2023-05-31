@@ -5,76 +5,13 @@
     <title>Marinar - Gestão de Marinas</title>
     <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
     <style>
-        .sidebar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            height: 100vh;
-            width: 500px; /* Alterada para largura mínima */
-            background-color: #29296b;
-            font-size: 30px;
-            padding: 20px;
-            transition: width 0.1s;
-        }
-
-        .sidebar.collapsed {
-            width: 100px;
-        }
-
-        .sidebar ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .sidebar ul li {
-            margin-bottom: 10px;
-        }
-
-        .sidebar ul li a {
-            color: #000;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            margin-bottom: 40px;
-        }
-
-        .sidebar ul li img {
-            margin-right: 10px;
-            width: 60px;
-            height: 60px;
-        }
-
-        .sidebar .logo {
-            margin-bottom: 50px;
-        }
-
-        .sidebar .logo img {
-            max-width: 50px;
-            height: 50px;
-        }
-
-        .sidebar .logout {
-            position: absolute;
-            bottom: 0;
-        }
-
-        .content {
-            margin-left: 200px;
-            padding: 20px;
-        }
-
-        .sidebar.collapsed ul li span {
-            display: none;
-        }
-
-        *{
+        * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Arial', sans-serif;
         }
-        body{
+        body {
             display: flex;
             align-items: start;
             padding: 0 10px;
@@ -82,14 +19,13 @@
             min-height: 100vh;
             background: #ffffff;
         }
-        .wrapper header{
+        .wrapper header {
             display: flex;
             align-items: center;
             padding: 25px 30px 10px;
             justify-content: space-between;
         }
-
-        header .icons span{
+        header .icons span {
             height: 38px;
             width: 38px;
             margin: 0 1px;
@@ -101,12 +37,10 @@
             user-select: none;
             border-radius: 50%;
         }
-
-        .icons span:last-child{
+        .icons span:last-child {
             margin-right: -10px;
         }
-
-        header .icons span:hover{
+        header .icons span:hover {
             background: #f2f2f2;
         }
         th {
@@ -120,9 +54,61 @@
         .increased-column-spacing td {
             padding-right: 100px; /* Ajusta o valor conforme necessário */
         }
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            width: 500px; /* Alterada para largura mínima */
+            background-color: #29296b;
+            font-size: 30px;
+            padding: 20px;
+            transition: width 0.1s;
+        }
+        .sidebar.collapsed {
+            width: 100px;
+        }
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .sidebar ul li {
+            margin-bottom: 10px;
+        }
+        .sidebar ul li a {
+            color: #000;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+        .sidebar ul li img {
+            margin-right: 10px;
+            width: 60px;
+            height: 60px;
+        }
+        .sidebar .logo {
+            margin-bottom: 50px;
+        }
+        .sidebar .logo img {
+            max-width: 50px;
+            height: 50px;
+        }
+        .sidebar .logout {
+            position: absolute;
+            bottom: 0;
+        }
+        .content {
+            margin-left: 200px;
+            padding: 20px;
+        }
+        .sidebar.collapsed ul li span {
+            display: none;
+        }
     </style>
 </head>
-<body>
+<body style="background-color: #393f81">
 <div class="sidebar collapsed"> <!-- Adicionada a classe collapsed -->
     <div class="logo">
         <button id="toggleSidebar" style="background: none; border: none; cursor: pointer;">
@@ -163,17 +149,17 @@
     </ul>
 </div>
 
-<div class="content">
+<div class="content" style="background-color: white; margin-top: 75px; margin-right: 40px; border-radius: 10px;">
     <h1 class="text-center mb-1" style="margin-bottom: 10px; font-weight: bold" >As Minhas Embarcações</h1>
-    <button class="btn btn-primary" style="margin:0 0 20px 1250px; font-size: 20px; padding: 10px" data-toggle="modal" data-target="#newBoatModal">Nova Embarcação</button>
-    <table class="table increased-column-spacing"> <!-- Adicionado a classe CSS "increased-column-spacing" -->
+    <button class="btn btn-primary" style="margin:0 0 20px 0; font-size: 20px; padding: 10px" data-toggle="modal" data-target="#newBoatModal">Nova Embarcação</button>
+    <table class="table increased-column-spacing" style="border-radius: 10px"> <!-- Adicionado a classe CSS "increased-column-spacing" -->
         <thead>
         <tr style="background-color: #29296b; color: orange">
             <th>Nome</th>
             <th>Marina</th>
             <th>Comprimento</th>
             <th>Valor da Embarcação (€)</th>
-            <th>Editar/Ver Detalhes</th>
+            <th>Editar Detalhes</th>
             <th>Eliminar</th>
         </tr>
         </thead>
@@ -184,7 +170,7 @@
             <td  th:text="${embarcacao.comprimentoByComprimento.getDescricao()}"></td>
             <td  th:text="${embarcacao.comprimentoByComprimento.getValorcomprimento()}"></td>
             <td >
-                <button class="btn btn-primary">Editar/Ver Detalhes</button>
+                <button type="button" class="btn btn-primary" data-toggle="modal" th:data-target="'#modal-' + ${embarcacao.idembarcacao}">Editar Detalhes</button>
             </td>
             <td >
                 <a class="btn btn-danger delBtn" data-toggle="modal" th:href="@{'/deleteEmb/' + ${id}(idEmb=${embarcacao.idembarcacao})}" data-target="#confirmDeleteModal">Eliminar</a>
@@ -196,10 +182,10 @@
 
 <!-- Modal para criar uma nova embarcação -->
 <div class="modal fade" id="newBoatModal" tabindex="-1" role="dialog" aria-labelledby="newBoatModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="newBoatModalLabel">Nova Embarcação</h5>
+                <h5 class="modal-title" id="newBoatModalLabel" style="font-weight: bold">Nova Embarcação</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -208,7 +194,7 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="boatName">Nome da Embarcação:</label>
-                        <input type="text" class="form-control" id="boatName" th:field="*{nome}">
+                        <input type="text" class="form-control" id="boatName" th:field="*{nome}" required>
                     </div>
                     <div class="form-group">
                         <label for="marinaName">Nome da Marina:</label>
@@ -225,7 +211,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                    <button type="submit" id="confirmButton" class="btn btn-primary">Salvar</button>
+                    <button type="submit" id="confirmButton" class="btn btn-success">Criar</button>
                 </div>
             </form>
 
@@ -233,12 +219,53 @@
     </div>
 </div>
 
+<div th:each="embarcacao : ${embarcacoes}">
+    <div class="modal fade" th:id="'modal-' + ${embarcacao.idembarcacao}">
+        <form th:action="@{'/saveEmb/' + ${id} + '/' + ${embarcacao.idembarcacao}}" th:object="${embarcacao}" method="post">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" style="font-weight: bold">Editar Embarcação</h5>
+                        <button type="button" class="close" data-dismiss="modal">
+                            <span>&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="nome">Nome:</label>
+                            <input class="form-control" name="nome" id="nome" th:value="${embarcacao.nome}" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="marina">Marina:</label>
+                            <select class="form-control"  id="marina" name="idmarina">
+                                <option th:each="marina : ${marinas}" th:value="${marina.idmarina}"
+                                        th:text="${marina.nome}" th:selected="${marina.idmarina == embarcacao.idmarina}"></option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="comprimento">Comprimento:</label>
+                            <select class="form-control" id="comprimento" name="comprimento">
+                                <option th:each="comprimento : ${comprimentos}" th:value="${comprimento.comprimento}"
+                                        th:text="${comprimento.descricao}" th:selected="${comprimento.comprimento == embarcacao.comprimento}"></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                        <button type="submit" class="btn btn-success">Salvar</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
 <!-- Modal de confirmação de eliminação -->
 <div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="confirmDeleteModalLabel">Eliminar Embarcação</h5>
+                <h5 class="modal-title" id="confirmDeleteModalLabel" style="font-weight: bold">Eliminar Embarcação</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
                     <span aria-hidden="true">&times;</span>
                 </button>

@@ -4,6 +4,7 @@ import com.example.projeto2_web.Classes.Agendamento.Agendamento;
 import com.example.projeto2_web.Classes.EstadoAgendamento.EstadoAgendamento;
 import jakarta.persistence.*;
 
+import java.sql.Date;
 import java.sql.Timestamp;
 
 @Entity
@@ -20,7 +21,7 @@ public class ListaEstadoAgendamento {
     private int idestado;
     @Basic
     @Column(name = "data")
-    private Timestamp data;
+    private Date data;
     @ManyToOne
     @JoinColumn(name = "idagendamento", referencedColumnName = "idagendamento", nullable = false, updatable = false, insertable = false)
     private Agendamento agendamentoByIdagendamento;
@@ -44,11 +45,11 @@ public class ListaEstadoAgendamento {
         this.idestado = idestado;
     }
 
-    public Timestamp getData() {
+    public Date getData() {
         return data;
     }
 
-    public void setData(Timestamp data) {
+    public void setData(Date data) {
         this.data = data;
     }
 
