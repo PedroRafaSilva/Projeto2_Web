@@ -18,9 +18,9 @@ public class CodPostal {
     private String localidade;
     @OneToMany(mappedBy = "codPostalByCpostal")
     private Collection<Marina> marinasByCpostal;
-    @OneToMany(mappedBy = "codPostalByCpostal")
+    @OneToMany(mappedBy = "codPostalByCpostal", cascade = CascadeType.REMOVE)
     private Collection<Oficina> oficinasByCpostal;
-    @OneToMany(mappedBy = "codPostalByCpostal")
+    @OneToMany(mappedBy = "codPostalByCpostal", cascade = CascadeType.REMOVE)
     private Collection<Utilizador> utilizadorsByCpostal;
 
     public String getCpostal() {

@@ -48,9 +48,9 @@ public class Agendamento {
     @ManyToOne
     @JoinColumn(name = "idutilizador", referencedColumnName = "idutilizador", updatable = false, insertable = false)
     private Utilizador utilizadorByIdutilizador;
-    @OneToMany(mappedBy = "agendamentoByIdagendamento")
+    @OneToMany(mappedBy = "agendamentoByIdagendamento", cascade = CascadeType.REMOVE)
     private Collection<AgendamentoExtra> agendamentoExtrasByIdagendamento;
-    @OneToMany(mappedBy = "agendamentoByIdagendamento")
+    @OneToMany(mappedBy = "agendamentoByIdagendamento", cascade = CascadeType.REMOVE)
     private Collection<ListaEstadoAgendamento> listaEstadoAgendamentosByIdagendamento;
 
     public int getIdagendamento() {

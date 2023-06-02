@@ -10,11 +10,9 @@ import java.sql.Date;
 @Table(name = "\"Projecto1\".\"ListaEstadoFatura\"")
 @IdClass(ListaEstadoFaturaPK.class)
 public class ListaEstadoFatura {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "idfatura")
     private int idfatura;
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "idestado")
     private int idestado;

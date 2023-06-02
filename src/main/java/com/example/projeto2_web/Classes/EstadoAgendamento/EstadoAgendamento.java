@@ -15,7 +15,7 @@ public class EstadoAgendamento {
     @Basic
     @Column(name = "estado")
     private String estado;
-    @OneToMany(mappedBy = "estadoAgendamentoByIdestado")
+    @OneToMany(mappedBy = "estadoAgendamentoByIdestado", cascade = CascadeType.REMOVE)
     private Collection<ListaEstadoAgendamento> listaEstadoAgendamentosByIdestado;
 
     public int getIdestado() {

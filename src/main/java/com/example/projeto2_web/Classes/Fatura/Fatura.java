@@ -42,18 +42,18 @@ public class Fatura {
     @Basic
     @Column(name = "numfiscal")
     private Integer numfiscal;
-    @OneToMany(mappedBy = "faturaByIdfatura")
+    @OneToMany(mappedBy = "faturaByIdfatura", cascade = CascadeType.REMOVE)
     private Collection<Agendamento> agendamentosByIdfatura;
     @ManyToOne
     @JoinColumn(name = "idutilizador", referencedColumnName = "idutilizador", updatable = false, insertable = false)
     private Utilizador utilizadorByIdutilizador;
-    @OneToMany(mappedBy = "faturaByIdfatura")
+    @OneToMany(mappedBy = "faturaByIdfatura", cascade = CascadeType.REMOVE)
     private Collection<ListaEmbarcacao> listaEmbarcacaosByIdfatura;
-    @OneToMany(mappedBy = "faturaByIdfatura")
+    @OneToMany(mappedBy = "faturaByIdfatura", cascade = CascadeType.REMOVE)
     private Collection<ListaEstadoFatura> listaEstadoFaturasByIdfatura;
-    @OneToMany(mappedBy = "faturaByIdfatura")
+    @OneToMany(mappedBy = "faturaByIdfatura", cascade = CascadeType.REMOVE)
     private Collection<Pagamento> pagamentosByIdfatura;
-    @OneToMany(mappedBy = "faturaByIdfatura")
+    @OneToMany(mappedBy = "faturaByIdfatura", cascade = CascadeType.REMOVE)
     private Collection<PedidoManutencao> pedidoManutencaosByIdfatura;
 
     public int getIdfatura() {

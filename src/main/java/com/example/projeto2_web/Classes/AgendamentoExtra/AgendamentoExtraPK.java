@@ -10,11 +10,9 @@ import java.io.Serializable;
 public class AgendamentoExtraPK implements Serializable {
     @Column(name = "idagendamento")
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idagendamento;
     @Column(name = "idextra")
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idextra;
 
     public int getIdagendamento() {

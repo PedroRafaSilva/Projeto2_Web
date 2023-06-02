@@ -11,11 +11,9 @@ import java.sql.Timestamp;
 @Table(name = "\"Projecto1\".\"ListaEstadoAgendamento\"")
 @IdClass(ListaEstadoAgendamentoPK.class)
 public class ListaEstadoAgendamento {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "idagendamento")
     private int idagendamento;
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "idestado")
     private int idestado;

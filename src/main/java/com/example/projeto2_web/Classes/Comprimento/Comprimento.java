@@ -18,7 +18,7 @@ public class Comprimento {
     @Basic
     @Column(name = "valorcomprimento")
     private Float valorcomprimento;
-    @OneToMany(mappedBy = "comprimentoByComprimento")
+    @OneToMany(mappedBy = "comprimentoByComprimento", cascade = CascadeType.REMOVE)
     private Collection<Embarcacao> embarcacaosByComprimento;
 
     public int getComprimento() {

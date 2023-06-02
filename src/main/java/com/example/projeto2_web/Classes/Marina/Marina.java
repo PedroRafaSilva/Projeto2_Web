@@ -19,7 +19,7 @@ public class Marina {
     @Basic
     @Column(name = "cpostal")
     private String cpostal;
-    @OneToMany(mappedBy = "marinaByIdmarina")
+    @OneToMany(mappedBy = "marinaByIdmarina", cascade = CascadeType.REMOVE)
     private Collection<Embarcacao> embarcacaosByIdmarina;
     @ManyToOne
     @JoinColumn(name = "cpostal", referencedColumnName = "cpostal", updatable = false, insertable = false)

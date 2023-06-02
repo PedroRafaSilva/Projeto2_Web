@@ -15,7 +15,7 @@ public class PedidoDescricao {
     @Basic
     @Column(name = "valor")
     private double valor;
-    @OneToMany(mappedBy = "pedidoDescricaoByDescricao")
+    @OneToMany(mappedBy = "pedidoDescricaoByDescricao", cascade = CascadeType.REMOVE)
     private Collection<PedidoManutencao> pedidoManutencaosByDescricao;
 
     public String getDescricao() {

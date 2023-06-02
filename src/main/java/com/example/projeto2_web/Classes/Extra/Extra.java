@@ -18,7 +18,7 @@ public class Extra {
     @Basic
     @Column(name = "valoratualextra")
     private Float valoratualextra;
-    @OneToMany(mappedBy = "extraByIdextra")
+    @OneToMany(mappedBy = "extraByIdextra", cascade = CascadeType.REMOVE)
     private Collection<AgendamentoExtra> agendamentoExtrasByIdextra;
 
     public int getIdextra() {

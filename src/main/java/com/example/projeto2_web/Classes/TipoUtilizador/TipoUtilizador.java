@@ -15,7 +15,7 @@ public class TipoUtilizador {
     @Basic
     @Column(name = "descricao")
     private String descricao;
-    @OneToMany(mappedBy = "tipoUtilizadorByIdtipoutilizador")
+    @OneToMany(mappedBy = "tipoUtilizadorByIdtipoutilizador", cascade = CascadeType.REMOVE)
     private Collection<Utilizador> utilizadorsByIdtipoutilizador;
 
     public int getIdtipoutilizador() {

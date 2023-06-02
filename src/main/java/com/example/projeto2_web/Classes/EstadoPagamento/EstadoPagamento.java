@@ -15,7 +15,7 @@ public class EstadoPagamento {
     @Basic
     @Column(name = "estado")
     private String estado;
-    @OneToMany(mappedBy = "estadoPagamentoByIdestado")
+    @OneToMany(mappedBy = "estadoPagamentoByIdestado", cascade = CascadeType.REMOVE)
     private Collection<ListaEstadoFatura> listaEstadoFaturasByIdestado;
 
     public int getIdestado() {

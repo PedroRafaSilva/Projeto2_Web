@@ -39,7 +39,7 @@ public class AgendamentoService {
     }
 
     public List<Agendamento> findAgendamentosByUtilizadorOrderByData(int id){
-        return agendamentoRepository.findAgendamentosByIdutilizadorOrderByData(id);
+        return agendamentoRepository.findAgendamentosByIdutilizadorOrderByDataDesc(id);
     }
 
 }

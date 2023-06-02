@@ -22,8 +22,4 @@ public class AgendamentosController {
         model.addAttribute("id", id);
         return "/Agendamentos/Agendamentos";
     }
-
-
-
-
 }

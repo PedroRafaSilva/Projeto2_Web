@@ -231,10 +231,10 @@
                 <button class="btn btn-primary">Editar Extras</button>
             </td>
             <td  th:text="${agendamento.valorextras}"></td>
-            <td  th:text="${agendamento.getListaEstadoAgendamentosByIdagendamento()
-            [agendamento.getListaEstadoAgendamentosByIdagendamento().size()-1].getEstadoAgendamentoByIdestado().getEstado()}"></td>
-            <td >
-                <button class="btn btn-primary">Editar</button>
+            <td th:text="${agendamento.getListaEstadoAgendamentosByIdagendamento()
+        [agendamento.getListaEstadoAgendamentosByIdagendamento().size()-1].getEstadoAgendamentoByIdestado().getEstado()}"></td>
+            <td>
+            <button class="btn btn-primary">Editar</button>
             </td>
             <td >
                 <button class="btn btn-danger">Cancelar</button>

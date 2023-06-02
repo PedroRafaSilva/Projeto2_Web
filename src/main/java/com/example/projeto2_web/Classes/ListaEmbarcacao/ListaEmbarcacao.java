@@ -8,11 +8,9 @@ import jakarta.persistence.*;
 @Table(name = "\"Projecto1\".\"ListaEmbarcacao\"")
 @IdClass(ListaEmbarcacaoPK.class)
 public class ListaEmbarcacao {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "idfatura")
     private int idfatura;
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "idembarcacao")
     private int idembarcacao;

@@ -29,7 +29,7 @@ public class Embarcacao {
     @Basic
     @Column(name = "comprimento")
     private int comprimento;
-    @OneToMany(mappedBy = "embarcacaoByIdembarcacao")
+    @OneToMany(mappedBy = "embarcacaoByIdembarcacao", cascade = CascadeType.REMOVE)
     private Collection<Agendamento> agendamentosByIdembarcacao;
     @ManyToOne
     @JoinColumn(name = "idutilizador", referencedColumnName = "idutilizador", updatable = false, insertable = false)
@@ -40,9 +40,9 @@ public class Embarcacao {
     @ManyToOne
     @JoinColumn(name = "comprimento", referencedColumnName = "comprimento", nullable = false, updatable = false, insertable = false)
     private Comprimento comprimentoByComprimento;
-    @OneToMany(mappedBy = "embarcacaoByIdembarcacao")
+    @OneToMany(mappedBy = "embarcacaoByIdembarcacao", cascade = CascadeType.REMOVE)
     private Collection<ListaEmbarcacao> listaEmbarcacaosByIdembarcacao;
-    @OneToMany(mappedBy = "embarcacaoByIdembarcacao")
+    @OneToMany(mappedBy = "embarcacaoByIdembarcacao", cascade = CascadeType.REMOVE)
     private Collection<PedidoManutencao> pedidoManutencaosByIdembarcacao;
 
     public int getIdembarcacao() {

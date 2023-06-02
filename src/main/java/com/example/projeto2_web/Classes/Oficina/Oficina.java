@@ -22,7 +22,7 @@ public class Oficina {
     @ManyToOne
     @JoinColumn(name = "cpostal", referencedColumnName = "cpostal", updatable = false, insertable = false)
     private CodPostal codPostalByCpostal;
-    @OneToMany(mappedBy = "oficinaByIdoficina")
+    @OneToMany(mappedBy = "oficinaByIdoficina", cascade = CascadeType.REMOVE)
     private Collection<PedidoManutencao> pedidoManutencaosByIdoficina;
 
     public int getIdoficina() {

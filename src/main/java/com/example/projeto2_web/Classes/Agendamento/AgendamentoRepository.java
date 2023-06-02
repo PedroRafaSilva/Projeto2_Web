@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface AgendamentoRepository extends JpaRepository<Agendamento, Integer> {
-     List<Agendamento> findAgendamentosByIdutilizadorOrderByData(int id);
+     List<Agendamento> findAgendamentosByIdutilizadorOrderByDataDesc(int id);
 }

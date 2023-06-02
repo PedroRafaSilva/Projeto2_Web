@@ -48,15 +48,15 @@ public class Utilizador {
     @Basic
     @Column(name = "password")
     private String password;
-    @OneToMany(mappedBy = "utilizadorByIdutilizador")
+    @OneToMany(mappedBy = "utilizadorByIdutilizador", cascade = CascadeType.REMOVE)
     private Collection<Agendamento> agendamentosByIdutilizador;
-    @OneToMany(mappedBy = "utilizadorByIdutilizador")
+    @OneToMany(mappedBy = "utilizadorByIdutilizador", cascade = CascadeType.REMOVE)
     private Collection<Embarcacao> embarcacaosByIdutilizador;
-    @OneToMany(mappedBy = "utilizadorByIdutilizador")
+    @OneToMany(mappedBy = "utilizadorByIdutilizador", cascade = CascadeType.REMOVE)
     private Collection<Fatura> faturasByIdutilizador;
-    @OneToMany(mappedBy = "utilizadorByIdutilizador")
+    @OneToMany(mappedBy = "utilizadorByIdutilizador", cascade = CascadeType.REMOVE)
     private Collection<Pagamento> pagamentosByIdutilizador;
-    @OneToMany(mappedBy = "utilizadorByIdutilizador")
+    @OneToMany(mappedBy = "utilizadorByIdutilizador", cascade = CascadeType.REMOVE)
     private Collection<PedidoManutencao> pedidoManutencaosByIdutilizador;
     @ManyToOne
     @JoinColumn(name = "cpostal", referencedColumnName = "cpostal", updatable = false, insertable = false)
