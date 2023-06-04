@@ -6,6 +6,7 @@ import com.example.projeto2_web.Classes.Fatura.Fatura;
 import com.example.projeto2_web.Classes.ListaEstadoAgendamento.ListaEstadoAgendamento;
 import com.example.projeto2_web.Classes.Utilizador.Utilizador;
 import jakarta.persistence.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.sql.Date;
 import java.sql.Time;
@@ -50,7 +51,8 @@ public class Agendamento {
     private Utilizador utilizadorByIdutilizador;
     @OneToMany(mappedBy = "agendamentoByIdagendamento", cascade = CascadeType.REMOVE)
     private Collection<AgendamentoExtra> agendamentoExtrasByIdagendamento;
-    @OneToMany(mappedBy = "agendamentoByIdagendamento", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "agendamentoByIdagendamento" , cascade = CascadeType.REMOVE)
+    @OrderBy("data DESC")
     private Collection<ListaEstadoAgendamento> listaEstadoAgendamentosByIdagendamento;
 
     public int getIdagendamento() {

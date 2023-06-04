@@ -24,7 +24,7 @@ public class EmbarcacoesController {
     private ComprimentoService comprimentoService;
 
     @GetMapping("/Embarcacoes/{id}")
-    public String showCalendar(@PathVariable("id") Integer id, Model model) {
+    public String showEmbarc(@PathVariable("id") Integer id, Model model) {
         model.addAttribute("embarcacoes", service.findEmbarcacaosByUtilizadorByIdutilizadorOrderByNome(utilizadorService.getUtilizadorById(id)));
         model.addAttribute("marinas", marinaService.getAllMarinaes());
         model.addAttribute("comprimentos", comprimentoService.getAllComprimentoes());

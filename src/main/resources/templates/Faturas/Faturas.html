@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Marinar - Gestão de Marinas</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
+    <style>
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            width: 500px; /* Alterada para largura mínima */
+            background-color: #29296b;
+            font-size: 30px;
+            padding: 20px;
+            transition: width 0.1s;
+        }
+        .sidebar.collapsed {
+            width: 100px;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar ul li {
+            margin-bottom: 10px;
+        }
+
+        .sidebar ul li a {
+            color: #000;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        .sidebar ul li img {
+            margin-right: 10px;
+            width: 60px;
+            height: 60px;
+        }
+
+        .sidebar .logo {
+            margin-bottom: 50px;
+        }
+
+        .sidebar .logo img {
+            max-width: 50px;
+            height: 50px;
+        }
+
+        .sidebar .logout {
+            position: absolute;
+            bottom: 0;
+        }
+
+        .content {
+            margin-left: 200px;
+            padding: 20px;
+        }
+
+        .sidebar.collapsed ul li span {
+            display: none;
+        }
+
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        body{
+            display: flex;
+            align-items: start;
+            padding: 0 10px;
+            justify-content: center;
+            min-height: 100vh;
+            background: #ffffff;
+        }
+        .wrapper header{
+            display: flex;
+            align-items: center;
+            padding: 25px 30px 10px;
+            justify-content: space-between;
+        }
+        header .icons{
+            display: flex;
+        }
+
+        header .icons span{
+            height: 38px;
+            width: 38px;
+            margin: 0 1px;
+            cursor: pointer;
+            color: #878787;
+            text-align: center;
+            line-height: 38px;
+            font-size: 1.9rem;
+            user-select: none;
+            border-radius: 50%;
+        }
+
+        .icons span:last-child{
+            margin-right: -10px;
+        }
+
+        header .icons span:hover{
+            background: #f2f2f2;
+        }
+
+        .calendar ul{
+            display: flex;
+            flex-wrap: wrap;
+            list-style: none;
+            text-align: center;
+        }
+
+        .calendar .days{
+            margin-bottom: 20px;
+        }
+
+        .calendar li{
+            color: #333;
+            width: calc(100% / 7);
+            font-size: 1.07rem;
+        }
+
+        .calendar .weeks li{
+            font-weight: 500;
+            cursor: default;
+        }
+        .calendar .days li{
+            z-index: 1;
+            cursor: pointer;
+            position: relative;
+            margin-top: 30px;
+        }
+        .days li::before{
+            position: absolute;
+            content: "";
+            left: 50%;
+            top: 50%;
+            height: 40px;
+            width: 40px;
+            z-index: -1;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+        th {
+            padding: 10px 30px;
+            text-align: center;
+        }
+        tr {
+            margin-left: 20px;
+        }
+        .increased-column-spacing th,
+        .increased-column-spacing td {
+            padding-right: 50px; /* Ajusta o valor conforme necessário */
+        }
+    </style>
+</head>
+<body style="background-color: #393f81">
+<div class="sidebar collapsed"> <!-- Adicionada a classe collapsed -->
+    <div class="logo">
+        <button id="toggleSidebar" style="background: none; border: none; cursor: pointer;">
+            <img src="https://img.icons8.com/FFFFFF/ios_filled/2x/menu.png" alt="Logo">
+        </button>
+    </div>
+    <ul>
+        <li>
+            <a th:href="@{'/Perfil/' + ${id}}" style="color: white;">
+                <img src="https://img.icons8.com/FFFFFF/fluent-systems-filled/2x/guest-male.png" alt="Imagem 1">
+                <span class="hide-text">Meu Perfil</span>
+            </a>
+        </li>
+        <li>
+            <a th:href="@{'/Embarcacoes/' + ${id}}" style="color: white;">
+                <img src="https://img.icons8.com/FFFFFF/ios11/2x/dive-boat.png" alt="Imagem 2">
+                <span class="hide-text">As Minhas Embarcações</span>
+            </a>
+        </li>
+        <li>
+            <a th:href="@{'/Agendamentos/' + ${id}}" style="color: white;">
+                <img src="https://img.icons8.com/FFFFFF/ios11/2x/overtime.png" alt="Imagem 3">
+                <span class="hide-text">Os Meus Agendamentos</span>
+            </a>
+        </li>
+        <li>
+            <a th:href="@{'/Faturas/' + ${id}}" style="color: orange; margin-bottom: 400px;">
+                <img src="https://img.icons8.com/F29D38/win10/2x/invoice.png" alt="Imagem 4">
+                <span class="hide-text">As Minhas Faturas</span>
+            </a>
+        </li>
+        <li class="logout">
+            <a href="/Login" style="color: white;">
+                <img src="https://img.icons8.com/FFFFFF/m_outlined/2x/logout-rounded-left.png" alt="Imagem 5">
+                <span class="hide-text">LogOut</span>
+            </a>
+        </li>
+    </ul>
+</div>
+
+<div class="content" style="background-color: white; margin-top: 75px; margin-right: 40px; border-radius: 10px;">
+    <h1 class="text-center mb-1" style="margin-bottom: 50px; font-weight: bold" >As Minhas Faturas</h1>
+    <table class="table increased-column-spacing" style="margin-top: 100px">
+        <thead>
+        <tr  style="background-color: #29296b; color: white">
+            <th>Data de criação</th>
+            <th>Validade</th>
+            <th>Valor das Embarcações (€)</th>
+            <th>Valor dos Agendamentos (€)</th>
+            <th>Valor dos Pedidos de Manutenção (€)</th>
+            <th>Valor Total (€)</th>
+            <th>Número Fiscal</th>
+            <th>Estado</th>
+        </tr>
+        </thead>
+        <tbody th:each="fatura: ${faturas}">
+        <tr style="padding: 10px 30px; text-align: center;">
+            <td  th:text="${fatura.datacriacao}"></td>
+            <td  th:text="${fatura.prazo}"></td>
+            <td  th:text="${fatura.valorembarcacoes}"></td>
+            <td  th:text="${fatura.valoragendamento}"></td>
+            <td  th:text="${fatura.valormanutencao}"></td>
+            <td  th:text="${fatura.valortotal}"></td>
+            <td  th:text="${fatura.numfiscal}"></td>
+            <td  th:text="${fatura.getListaEstadoFaturasByIdfatura()
+                 [fatura.getListaEstadoFaturasByIdfatura().size()-1].getEstadoPagamentoByIdestado().getEstado()}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#toggleSidebar').click(function() {
+            $('.sidebar').toggleClass('collapsed');
+        });
+    });
+</script>
+</body>
+</html>

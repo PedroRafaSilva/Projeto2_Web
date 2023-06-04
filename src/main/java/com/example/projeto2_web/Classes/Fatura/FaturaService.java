@@ -1,9 +1,9 @@
 package com.example.projeto2_web.Classes.Fatura;
 
-import com.example.projeto2_web.Classes.Fatura.Fatura;
-import com.example.projeto2_web.Classes.Fatura.FaturaRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,4 +35,25 @@ public class FaturaService {
         faturaRepository.deleteById(id);
     }
 
+    public List<Fatura> findAFaturasByUtilizadorOrderByData(int id){
+        List<Fatura> faturas = faturaRepository.findFaturasByIdutilizadorOrderByDatacriacaoDesc(id);
+        List<Fatura> faturasDisponiveis = new ArrayList<>();
+        for (Fatura fatura: faturas){
+            if (fatura.getDatacriacao().toLocalDate().isBefore(LocalDate.now())){
+                faturasDisponiveis.add(fatura);
+            }
+        }
+        return faturasDisponiveis;
+    }
+
+    public Fatura FindByUtilizadorAndMonthOfNow(int id){
+        List<Fatura> faturas = findAFaturasByUtilizadorOrderByData(id);
+        for(Fatura fatura: faturas) {
+            if(fatura.getDatacriacao().toLocalDate().getMonth().equals(LocalDate.now().getMonth())
+            && fatura.getDatacriacao().toLocalDate().getYear() == LocalDate.now().getYear()){
+                return fatura;
+            }
+        }
+        return null;
+    }
 }

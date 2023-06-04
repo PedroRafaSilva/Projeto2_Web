@@ -160,11 +160,11 @@
         }
         .increased-column-spacing th,
         .increased-column-spacing td {
-            padding-right: 100px; /* Ajusta o valor conforme necessário */
+            padding-right: 70px; /* Ajusta o valor conforme necessário */
         }
     </style>
 </head>
-<body>
+<body style="background-color: #393f81">
 <div class="sidebar collapsed"> <!-- Adicionada a classe collapsed -->
     <div class="logo">
         <button id="toggleSidebar" style="background: none; border: none; cursor: pointer;">
@@ -205,11 +205,12 @@
     </ul>
 </div>
 
-<div class="content">
-    <h1 class="text-center mb-5" style="margin-bottom: 100px" >Os Meus Agendamentos</h1>
-    <table class="table">
+<div class="content" style="background-color: white; margin-top: 75px; margin-right: 40px; border-radius: 10px;">
+    <h1 class="text-center mb-1" style="margin-bottom: 10px; font-weight: bold" >Os Meus Agendamentos</h1>
+    <button class="btn btn-primary" style="margin:0 0 20px 0; font-size: 20px; padding: 10px" data-toggle="modal" data-target="#myModal">Novo Agendamento</button>
+    <table class="table increased-column-spacing">
         <thead>
-        <tr style="background-color: #29296b; color: orange">
+        <tr  style="background-color: #29296b; color: white">
             <th>Data</th>
             <th>Embarcação</th>
             <th>Hora de Início</th>
@@ -228,20 +229,130 @@
             <td  th:text="${agendamento.horainicio}"></td>
             <td  th:text="${agendamento.horafim}"></td>
             <td >
-                <button class="btn btn-primary">Editar Extras</button>
+                <button class="btn btn-primary" data-toggle="modal" th:data-target="'#modal-' + ${agendamento.idagendamento}">
+                    Ver Extras
+                </button>
             </td>
             <td  th:text="${agendamento.valorextras}"></td>
-            <td th:text="${agendamento.getListaEstadoAgendamentosByIdagendamento()
-        [agendamento.getListaEstadoAgendamentosByIdagendamento().size()-1].getEstadoAgendamentoByIdestado().getEstado()}"></td>
+            <td th:text="${agendamento.getListaEstadoAgendamentosByIdagendamento[0].estadoAgendamentoByIdestado.estado}"></td>
             <td>
-            <button class="btn btn-primary">Editar</button>
+            <button th:if="${agendamento.getListaEstadoAgendamentosByIdagendamento()
+        [0].getEstadoAgendamentoByIdestado().getEstado()} == 'Agendado'"
+                    class="btn btn-primary">Editar</button>
             </td>
             <td >
-                <button class="btn btn-danger">Cancelar</button>
+                <a th:if="${agendamento.getListaEstadoAgendamentosByIdagendamento()
+        [0].getEstadoAgendamentoByIdestado().getEstado()} == 'Agendado'"
+                        class="btn btn-danger delBtn" data-toggle="modal" th:href="@{'/cancel/' + ${id}(idAgen=${agendamento.idagendamento})}" data-target="#confirmDeleteModal">Cancelar</a>
             </td>
         </tr>
         </tbody>
     </table>
+
+    <!-- Modal de Extras -->
+    <div th:each="agendamento : ${agendamentos}">
+        <div class="modal fade" th:id="'modal-' + ${agendamento.idagendamento}">
+            <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" style="font-weight: bold">Ver Extras</h5>
+                        <button type="button" class="close" data-dismiss="modal">
+                            <span>&times;</span>
+                        </button>
+                    </div>
+                        <div class="modal-body">
+                            <table class="table increased-column-spacing">
+                                <thead>
+                                <tr style="background-color: #29296b; color: white">
+                                    <th>Extra</th>
+                                    <th>Preço por Unidade (€)</th>
+                                    <th>Quantidade (unidade)</th>
+                                    <th>Preço Total (€)</th>
+                                </tr>
+                                </thead>
+                                <tbody th:each="extra: ${agendamento.getAgendamentoExtrasByIdagendamento()}">
+                                <tr style="padding: 10px 30px; text-align: center;">
+                                    <td  th:text="${extra.getExtraByIdextra().descricao}"></td>
+                                    <td  th:text="${extra.getExtraByIdextra().getValoratualextra()}"></td>
+                                    <td  th:text="${extra.qtd}"></td>
+                                    <td  th:text="${extra.valorextra}"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="myModalLabel">Criar Agendamento</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form th:action="@{'/saveAgend/' + ${id} + '/' + ${agendamento.idagendamento}}" th:object="${agendamento}" method="post">
+                        <div class="form-group">
+                            <label for="embarcacao">Embarcação:</label>
+                            <select class="form-control"  id="embarcacao" name="idembarcacao">
+                                <option th:each="embarcacao : ${embarcacaos}" th:value="${embarcacao.idembarcacao}"
+                                        th:text="${embarcacao.nome}" th:selected="${embarcacao.idembarcacao == agendamento.idembarcacao}"></option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="data">Data:</label>
+                            <input type="date" class="form-control" id="data" th:field="*{data}" required th:pattern="yyyy-MM-dd"/>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="horaInicio">Hora de Início:</label>
+                            <input type="time" step="1" class="form-control" id="horaInicio" th:field="*{horainicio}" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="horaFim">Hora de Fim:</label>
+                            <input type="time" step="1" class="form-control" id="horaFim" th:field="*{horafim}" required>
+                        </div>
+
+
+
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                            <button type="submit" class="btn btn-primary">Reservar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de confirmação de cancelamento -->
+    <div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmDeleteModalLabel" style="font-weight: bold">Cancelar Agendamento</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Deseja realmente cancelar este agendamento?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <a href="" type="button" id="deleteButton" class="btn btn-danger">Cancelar Agendamento</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 </div>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
@@ -250,6 +361,42 @@
         $('#toggleSidebar').click(function() {
             $('.sidebar').toggleClass('collapsed');
         });
+    });
+</script>
+<script>
+    let tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 2);
+    let tomorrowFormatted = tomorrow.toISOString().split('T')[0];
+    document.getElementById("data").min = tomorrowFormatted;
+</script>
+<script>
+    var horaInicioInput = document.getElementById('horaInicio');
+    let horaFimInput = document.getElementById('horaFim');
+
+    horaInicioInput.addEventListener('input', validateHoras);
+    horaFimInput.addEventListener('input', validateHoras);
+
+    function validateHoras() {
+        var horaInicio = horaInicioInput.value;
+        var horaFim = horaFimInput.value;
+
+        // Converter os valores para objetos Date
+        var inicio = new Date('2000-01-01 ' + horaInicio);
+        var fim = new Date('2000-01-01 ' + horaFim);
+
+        if (inicio >= fim) {
+            horaFimInput.setCustomValidity('A hora de fim deve ser posterior à hora de início.');
+        } else {
+            horaFimInput.setCustomValidity('');
+        }
+    }
+</script>
+<script>
+    $('.table .delBtn').on('click', function(event) {
+        event.preventDefault();
+        let href = $(this).attr('href');
+        $('#confirmDeleteModal #deleteButton').attr('href', href);
+        $('#confirmDeleteModal').modal();
     });
 </script>
 </body>
