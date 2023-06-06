@@ -180,8 +180,47 @@
     </table>
 </div>
 
+<!-- Modal para criar uma nova embarcação -->
+<div class="modal fade" id="newBoatModal" tabindex="-1" role="dialog" aria-labelledby="newBoatModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="newBoatModalLabel" style="font-weight: bold">Nova Embarcação</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form th:action="@{'/validateEmb/' + ${id}}" th:object="${embarcacao}" method="post">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="boatName">Nome da Embarcação:</label>
+                        <input type="text" class="form-control" id="boatName" th:field="*{nome}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="marinaName">Nome da Marina:</label>
+                        <select class="form-control" id="marinaName" th:field="*{idmarina}">
+                            <option th:each="marina : ${marinas}" th:value="${marina.idmarina}" th:text="${marina.nome}"></option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="boatLength">Comprimento:</label>
+                        <select class="form-control" id="boatLength" th:field="*{comprimento}">
+                            <option th:each="comprimento : ${comprimentos}" th:value="${comprimento.comprimento}" th:text="${comprimento.descricao}"></option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" id="confirmButton" class="btn btn-success">Criar</button>
+                </div>
+            </form>
 
-<!-- Modal de criação de embarcações -->
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal de edição de embarcações -->
 <div th:each="embarcacao : ${embarcacoes}">
     <div class="modal fade" th:id="'modal-' + ${embarcacao.idembarcacao}">
         <form th:action="@{'/saveEmb/' + ${id} + '/' + ${embarcacao.idembarcacao}}" th:object="${embarcacao}" method="post">

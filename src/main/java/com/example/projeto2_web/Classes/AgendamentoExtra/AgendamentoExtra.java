@@ -8,7 +8,6 @@ import jakarta.persistence.*;
 @IdClass(AgendamentoExtraPK.class)
 @Table(name = "\"Projecto1\".\"AgendamentoExtra\"")
 public class AgendamentoExtra {
-
     @Id
     @Column(name = "idagendamento")
     private int idagendamento;
@@ -27,6 +26,9 @@ public class AgendamentoExtra {
     @ManyToOne
     @JoinColumn(name = "idextra", referencedColumnName = "idextra", nullable = false, updatable = false, insertable = false)
     private Extra extraByIdextra;
+
+    public AgendamentoExtra() {
+    }
 
     public int getIdagendamento() {
         return idagendamento;
