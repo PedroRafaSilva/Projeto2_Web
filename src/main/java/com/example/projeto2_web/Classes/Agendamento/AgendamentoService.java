@@ -44,7 +44,7 @@ public class AgendamentoService {
     }
 
     public List<Agendamento> findAgendamentosByUtilizadorOrderByData(int id){
-        return agendamentoRepository.findAgendamentosByIdutilizadorOrderByDataDesc(id);
+        return agendamentoRepository.findAgendamentosByIdutilizadorOrderByDataDescHorainicioDesc(id);
     }
 
 }

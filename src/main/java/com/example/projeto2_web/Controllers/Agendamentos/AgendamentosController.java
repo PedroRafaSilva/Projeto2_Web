@@ -5,9 +5,9 @@ import com.example.projeto2_web.Classes.Agendamento.AgendamentoService;
 import com.example.projeto2_web.Classes.AgendamentoExtra.AgendamentoExtra;
 import com.example.projeto2_web.Classes.AgendamentoExtra.AgendamentoExtraPK;
 import com.example.projeto2_web.Classes.AgendamentoExtra.AgendamentoExtraService;
-import com.example.projeto2_web.Classes.Embarcacao.Embarcacao;
 import com.example.projeto2_web.Classes.Embarcacao.EmbarcacaoService;
 import com.example.projeto2_web.Classes.Extra.ExtraService;
+import com.example.projeto2_web.Classes.Fatura.Fatura;
 import com.example.projeto2_web.Classes.Fatura.FaturaService;
 import com.example.projeto2_web.Classes.ListaEstadoAgendamento.ListaEstadoAgendamento;
 import com.example.projeto2_web.Classes.ListaEstadoAgendamento.ListaEstadoAgendamentoService;
@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.sql.Time;
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 @Controller
@@ -39,11 +40,13 @@ public class AgendamentosController {
         model.addAttribute("extras", extraService.getAllExtraes());
         model.addAttribute("agendamento", new Agendamento());
         model.addAttribute("agendExtra", new AgendamentoExtra());
+        model.addAttribute("agendExtras", agendamentoExtraService.getAllAgendamentoExtra());
         return "/Agendamentos/Agendamentos";
     }
 
     @PostMapping("/saveAgend/{id}/{idAgend}")
     public String save(@PathVariable("id") Integer id, @PathVariable("idAgend") Integer idAgend, Agendamento agendamento, @RequestParam("horainicio") String horaInicioValue, @RequestParam("horafim") String horaFimValue) {
+        agendamento.setValorextras(0f);
         CreateAgend(agendamento, id, horaInicioValue, horaFimValue);
         return "redirect:/Agendamentos/{id}";
     }
@@ -55,11 +58,15 @@ public class AgendamentosController {
         listaEstadoAgendamento.setIdestado(1);
         listaEstadoAgendamento.setData(LocalDateTime.now());
         listaEstadoAgendamentoService.saveListaEstadoAgendamento(listaEstadoAgendamento);
+        Fatura fatura = faturaService.FindByUtilizadorAndMonthOfNow(id);
+        fatura.setValoragendamento(fatura.getValoragendamento() - service.getAgendamentoById(idAgen).getValorextras());
+        faturaService.updateFatura(fatura);
         return "redirect:/Agendamentos/{id}";
     }
 
     @PostMapping("/editAgend/{id}/{idAgend}")
     public String edit(@PathVariable("id") Integer id, @PathVariable("idAgend") Integer idAgend, Agendamento agendamento, @RequestParam("horaInicio") String horaInicioValue, @RequestParam("horaFim") String horaFimValue){
+        agendamento.setValorextras(service.getAgendamentoById(idAgend).getValorextras());
         agendamento.setIdagendamento(idAgend);
         CreateAgend(agendamento, id, horaInicioValue, horaFimValue);
         return "redirect:/Agendamentos/{id}";
@@ -68,9 +75,18 @@ public class AgendamentosController {
     @PostMapping("/saveExtra/{id}/{idAgend}")
     public String saveExtra (@PathVariable("id") Integer id, @PathVariable("idAgend") Integer idAgend, AgendamentoExtra agendamentoExtra){
         agendamentoExtra.setIdagendamento(idAgend);
+        float TotalValue = 0f;
         agendamentoExtraService.saveAgendamentoExtra(agendamentoExtra);
-        service.getAgendamentoById(idAgend).setValorextras(service.getAgendamentoById(idAgend).getValorextras() + agendamentoExtra.getValorextra());
+        List<AgendamentoExtra> agendamentoExtras = (List<AgendamentoExtra>) service.getAgendamentoById(idAgend).getAgendamentoExtrasByIdagendamento();
+        if (agendamentoExtras != null){
+            for(AgendamentoExtra agendamentoExtra1 : agendamentoExtras){
+                TotalValue += agendamentoExtra1.getValorextra();
+            }
+        }
+        service.getAgendamentoById(idAgend).setValorextras(TotalValue);
         service.updateAgendamento(service.getAgendamentoById(idAgend));
+        faturaService.FindByUtilizadorAndMonthOfNow(id).setValoragendamento(faturaService.FindByUtilizadorAndMonthOfNow(id).getValoragendamento() +     service.getAgendamentoById(idAgend).getValorextras());
+        faturaService.updateFatura(faturaService.FindByUtilizadorAndMonthOfNow(id));
         return "redirect:/Agendamentos/{id}";
     }
 
@@ -82,6 +98,9 @@ public class AgendamentosController {
         Agendamento agendamento = service.getAgendamentoById(idAgen);
         agendamento.setValorextras(agendamento.getValorextras() - agendamentoExtraService.getAgendamentoExtraById(agendamentoExtraPK).getValorextra());
         agendamentoExtraService.deleteAgendamentoExtra(agendamentoExtraService.getAgendamentoExtraById(agendamentoExtraPK));
+        float valor = faturaService.FindByUtilizadorAndMonthOfNow(id).getValoragendamento() + agendamento.getValorextras();
+        faturaService.FindByUtilizadorAndMonthOfNow(id).setValoragendamento(valor);
+        faturaService.updateFatura(faturaService.FindByUtilizadorAndMonthOfNow(id));
         return "redirect:/Agendamentos/{id}";
     }
 
@@ -98,8 +117,9 @@ public class AgendamentosController {
         agendamento.setHorainicio(Time.valueOf(horaInicioValue));
         agendamento.setHorafim(Time.valueOf(horaFimValue));
         agendamento.setIdutilizador(id);
-        agendamento.setValorextras(0f);
         service.updateAgendamento(agendamento);
+        faturaService.FindByUtilizadorAndMonthOfNow(id).setValoragendamento(agendamento.getValorextras());
+        faturaService.updateFatura(faturaService.FindByUtilizadorAndMonthOfNow(id));
         CreateEstado(agendamento);
     }
 

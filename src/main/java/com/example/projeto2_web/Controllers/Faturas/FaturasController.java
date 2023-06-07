@@ -14,7 +14,7 @@ public class FaturasController {
 
     @GetMapping("/Faturas/{id}")
     public String showCalendar(@PathVariable("id") Integer id, Model model) {
-        model.addAttribute("faturas", service.findAFaturasByUtilizadorOrderByData(id));
+        model.addAttribute("faturas", service.getAllFaturasGenerated(id));
         model.addAttribute("id", id);
         return "/Faturas/Faturas";
     }

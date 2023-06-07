@@ -50,6 +50,7 @@ public class Fatura {
     @OneToMany(mappedBy = "faturaByIdfatura", cascade = CascadeType.REMOVE)
     private Collection<ListaEmbarcacao> listaEmbarcacaosByIdfatura;
     @OneToMany(mappedBy = "faturaByIdfatura", cascade = CascadeType.REMOVE)
+    @OrderBy("data DESC")
     private Collection<ListaEstadoFatura> listaEstadoFaturasByIdfatura;
     @OneToMany(mappedBy = "faturaByIdfatura", cascade = CascadeType.REMOVE)
     private Collection<Pagamento> pagamentosByIdfatura;

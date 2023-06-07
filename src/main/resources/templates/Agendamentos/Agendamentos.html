@@ -180,7 +180,7 @@
 <div class="content" style="background-color: white; margin-top: 75px; margin-right: 40px; border-radius: 10px;">
     <h1 class="text-center mb-1" style="margin-bottom: 10px; font-weight: bold" >Os Meus Agendamentos</h1>
     <button class="btn btn-primary" style="margin:0 0 20px 0; font-size: 20px; padding: 10px" data-toggle="modal" data-target="#myModal">Novo Agendamento</button>
-    <table class="table increased-column-spacing">
+    <table class="table increased-column-spacing" id="faturasTable">
         <thead>
         <tr  style="background-color: #29296b; color: white">
             <th>Data</th>
@@ -229,10 +229,13 @@
         </tr>
         </tbody>
     </table>
+    <a style="color: white" class="btn btn-primary" id="paginaAnterior">Anterior</a>
+    <a style="color: white" class="btn btn-primary" id="proximaPagina">Próxima</a>
+</div>
 
 
-    <!-- Modal de Extras -->
-    <div th:each="agendamento : ${agendamentos}">
+<!-- Modal de Extras -->
+<div th:each="agendamento : ${agendamentos}">
         <div class="modal fade" th:id="'modal1-' + ${agendamento.idagendamento}">
             <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
                 <div class="modal-content">
@@ -268,242 +271,238 @@
     </div>
 
 
-    <!-- Modal de Extras Adicionar-->
-    <div th:each="agendamento : ${agendamentos}">
-        <div class="modal fade" th:id="'modal2-' + ${agendamento.idagendamento}">
-            <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" style="font-weight: bold">Ver Extras</h5>
-                        <button type="button" class="close" data-dismiss="modal">
-                            <span>&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <button class="btn btn-primary" style="margin:10px 0 20px 0; font-size: 20px; padding: 10px"
-                                th:if="${agendamento.getAgendamentoExtrasByIdagendamento().size() < extras.size()}" data-toggle="modal" th:data-target="'#addExtra-' + ${agendamento.idagendamento}">Adicionar Extra</button>
-                        <table class="table" style="padding-right: 10px">
-                            <thead>
-                            <tr style="background-color: #29296b; color: white">
-                                <th>Extra</th>
-                                <th>Preço por Unidade (€)</th>
-                                <th>Quantidade (unidade)</th>
-                                <th>Preço Total (€)</th>
-                                <th>Editar Extra</th>
-                                <th>Remover Extra</th>
-                            </tr>
-                            </thead>
-                            <tbody th:each="extra: ${agendamento.getAgendamentoExtrasByIdagendamento()}">
-                            <tr style="padding: 10px 30px; text-align: center;">
-                                <td  th:text="${extra.getExtraByIdextra().descricao}"></td>
-                                <td  th:text="${extra.getExtraByIdextra().getValoratualextra()}"></td>
-                                <td  th:text="${extra.qtd}"></td>
-                                <td  th:text="${extra.valorextra}"></td>
-                                <td>
-                                    <button class="btn btn-primary" data-toggle="modal" th:data-target="'#editExtra-' + ${agendamento.idagendamento}">Editar</button>
-                                </td>
-                                <td >
-                                    <a class="btn btn-danger delExtBtn" data-toggle="modal" th:href="@{'/deleteExtra/' + ${extra.idextra} + '/' + ${id}(idAgen=${agendamento.idagendamento})}" data-target="#deleteExtra">Cancelar</a>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
+<!-- Modal de Extras Adicionar-->
+<div th:each="agendamento : ${agendamentos}">
+    <div class="modal fade" th:id="'modal2-' + ${agendamento.idagendamento}">
+        <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" style="font-weight: bold">Ver Extras</h5>
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span>&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <button class="btn btn-primary" style="margin:10px 0 20px 0; font-size: 20px; padding: 10px"
+                            th:if="${agendamento.getAgendamentoExtrasByIdagendamento().size() < extras.size()}" data-toggle="modal" th:data-target="'#addExtra-' + ${agendamento.idagendamento}">Adicionar Extra</button>
+                    <button class="btn btn-primary" style="margin:10px 0 20px 0; font-size: 20px; padding: 10px"
+                            th:if="${agendamento.getAgendamentoExtrasByIdagendamento().size() == extras.size()}" data-toggle="modal" th:data-target="'#addExtra-' + ${agendamento.idagendamento}">Alterar Extras</button>
+                    <table class="table" style="padding-right: 10px">
+                        <thead>
+                        <tr style="background-color: #29296b; color: white">
+                            <th>Extra</th>
+                            <th>Preço por Unidade (€)</th>
+                            <th>Quantidade (unidade)</th>
+                            <th>Preço Total (€)</th>
+                            <th>Remover Extra</th>
+                        </tr>
+                        </thead>
+                        <tbody th:each="extra: ${agendamento.getAgendamentoExtrasByIdagendamento()}">
+                        <tr style="padding: 10px 30px; text-align: center;">
+                            <td  th:text="${extra.getExtraByIdextra().descricao}"></td>
+                            <td  th:text="${extra.getExtraByIdextra().getValoratualextra()}"></td>
+                            <td  th:text="${extra.qtd}"></td>
+                            <td  th:text="${extra.valorextra}"></td>
+                            <td >
+                                <a class="btn btn-danger delExtBtn" data-toggle="modal" th:href="@{'/deleteExtra/' + ${extra.idextra} + '/' + ${id}(idAgen=${agendamento.idagendamento})}" data-target="#deleteExtra">Remover</a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
 
-    <!-- Modal para adicionar Extra -->
-    <div th:each="agendamento : ${agendamentos}">
-        <div class="modal fade" th:id="'addExtra-' + ${agendamento.idagendamento}">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
+<!-- Modal para adicionar Extra -->
+<div th:each="agendamento : ${agendamentos}">
+    <div class="modal fade" th:id="'addExtra-' + ${agendamento.idagendamento}">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
                     <h5 class="modal-title" id="myModalLabel">Adicionar Extra</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form  th:action="@{'/saveExtra/' + ${id} + '/' + ${agendamento.idagendamento}}" th:object="${agendExtra}" method="post">
+                <form th:action="@{'/saveExtra/' + ${id} + '/' + ${agendamento.idagendamento}}" th:object="${agendExtra}" method="post">
                     <div class="modal-body">
-                        <div id="passo1">
-                            <div class="form-group">
-                                <label for="idextra">Extra:</label>
-                                <select class="form-control"  id="idextra" name="idextra" onchange="atualizarValorExtra()">
-                                    <option th:each="extra : ${extras}" th:value="${extra.idextra}" th:data-valor="${extra.valoratualextra}"
-                                            th:text="${extra.descricao}"></option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="valorExtraAtual">Valor Extra(€): </label>
-                                <label id="valorExtraAtual" ></label>
-                            </div>
-                            <div class="form-group">
-                                <label for="qtd">Quantidade(unidade):</label>
-                                <input type="number" min="0" class="form-control" id="qtd" th:field="*{qtd}" value="0" required onchange="atualizarValorExtra()">
-                            </div>
-                            <div class="form-group">
-                                <label for="valorextra">Valor Total(€): </label>
-                                <input id="valorextra" type="text" th:field="*{valorextra}" readonly>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary btnVoltar" data-dismiss="modal" >Fechar</button>
-                            <button type="submit" class="btn btn-success btnFinalizar">Finalizar</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-    </div>
-
-    <!-- Modal de confirmação de cancelamento de extra -->
-    <div class="modal fade" id="deleteExtra" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="confirmDeleteModalLabel" style="font-weight: bold">Remover Extra</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <p>Deseja realmente remover este extra?</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                    <a href="" type="button" id="deleteButton" class="btn btn-danger">Remover Extra</a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-    <!-- Modal para criar agendamento -->
-    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="myModalLabel">Criar Agendamento</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <form  th:action="@{'/saveAgend/' + ${id} + '/' + ${agendamento.idagendamento}}" th:object="${agendamento}" method="post">
-                <div class="modal-body">
-                    <div id="passo1">
                         <div class="form-group">
-                            <label for="embarcacao">Embarcação:</label>
-                            <select class="form-control"  id="embarcacao" name="idembarcacao">
-                                <option th:each="embarcacao : ${embarcacaos}" th:value="${embarcacao.idembarcacao}"
-                                        th:text="${embarcacao.nome}" th:selected="${embarcacao.idembarcacao == agendamento.idembarcacao}"></option>
+                            <label for="idextra">Extra:</label>
+                            <select class="form-control" id="idextra" name="idextra" onchange="atualizarValorExtra()">
+                                <option th:each="extra : ${extras}" th:value="${extra.idextra}" th:data-valor="${extra.valoratualextra}"
+                                        th:text="${extra.descricao}"></option>
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="data">Data:</label>
-                            <input type="date" class="form-control" id="data" th:field="*{data}" required th:pattern="yyyy-MM-dd"/>
+                            <label>Valor Extra(€): </label>
+                            <label class="valorExtraAtual"></label>
                         </div>
-
                         <div class="form-group">
-                            <label for="horaInicio">Hora de Início:</label>
-                            <input type="time" step="1" class="form-control" id="horaInicio" th:field="*{horainicio}" required>
+                            <label for="qtd">Quantidade(unidade):</label>
+                            <input type="number" min="0" class="form-control" id="qtd" th:field="*{qtd}" required onchange="atualizarValorExtra()">
                         </div>
-
                         <div class="form-group">
-                            <label for="horaFim">Hora de Fim:</label>
-                            <input type="time" step="1" class="form-control" id="horaFim" th:field="*{horafim}" required>
+                            <label>Valor Total(€): </label>
+                            <input class="valorextra" name="valorextra" type="text" th:field="*{valorextra}" readonly>
                         </div>
                     </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary btnVoltar" data-dismiss="modal" >Fechar</button>
-                    <button type="submit" class="btn btn-success btnFinalizar">Finalizar</button>
-                </div>
-                </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary btnVoltar" data-dismiss="modal">Fechar</button>
+                        <button type="submit" class="btn btn-success btnFinalizar">Finalizar</button>
+                    </div>
                 </form>
             </div>
         </div>
     </div>
+</div>
 
-
-    <!-- Modal de confirmação de cancelamento -->
-    <div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="confirmDeleteModalLabel" style="font-weight: bold">Cancelar Agendamento</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <p>Deseja realmente cancelar este agendamento?</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                    <a href="" type="button" id="deleteButton" class="btn btn-danger">Cancelar Agendamento</a>
-                </div>
+<!-- Modal de confirmação de cancelamento de extra -->
+<div class="modal fade" id="deleteExtra" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmDeleteModalLabel" style="font-weight: bold">Remover Extra</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Deseja realmente remover este extra?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <a href="" type="button" id="deleteButton" class="btn btn-danger">Remover Extra</a>
             </div>
         </div>
     </div>
+</div>
 
 
-    <!-- Modal de edição de agendamentos -->
-    <div th:each="agendamento : ${agendamentos}">
-        <div class="modal fade" th:id="'modal-' + ${agendamento.idagendamento}">
-            <form th:action="@{'/editAgend/' + ${id} + '/' + ${agendamento.idagendamento}}" th:object="${agendamento}" method="post">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" style="font-weight: bold">Editar Agendamento</h5>
-                            <button type="button" class="close" data-dismiss="modal">
-                                <span>&times;</span>
-                            </button>
-                        </div>
-                            <div class="modal-body">
-                                <div id="passo1">
-                                    <div class="form-group">
-                                        <label for="embarcacao">Embarcação:</label>
-                                        <select class="form-control"  id="embarcacao" name="idembarcacao">
-                                            <option th:each="embarcacao : ${embarcacaos}" th:value="${embarcacao.idembarcacao}"
-                                                    th:text="${embarcacao.nome}" th:selected="${embarcacao.idembarcacao == agendamento.idembarcacao}"></option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="data">Data:</label>
-                                        <input type="date" class="form-control" id="data" name="data" required th:pattern="yyyy-MM-dd" th:value="${agendamento.data}"/>
-                                    </div>
+<!-- Modal para criar agendamento -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="myModalLabel">Criar Agendamento</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form  th:action="@{'/saveAgend/' + ${id} + '/' + ${agendamento.idagendamento}}" th:object="${agendamento}" method="post">
+            <div class="modal-body">
+                <div id="passo1">
+                    <div class="form-group">
+                        <label for="embarcacao">Embarcação:</label>
+                        <select class="form-control"  id="embarcacao" name="idembarcacao">
+                            <option th:each="embarcacao : ${embarcacaos}" th:value="${embarcacao.idembarcacao}"
+                                    th:text="${embarcacao.nome}" th:selected="${embarcacao.idembarcacao == agendamento.idembarcacao}"></option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="data">Data:</label>
+                        <input type="date" class="form-control" id="data" th:field="*{data}" required th:pattern="yyyy-MM-dd"/>
+                    </div>
 
-                                    <div class="form-group">
-                                        <label for="horaInicio">Hora de Início:</label>
-                                        <input type="time" step="1" class="form-control" id="horaInicio" name="horaInicio" th:value="${agendamento.horainicio}" required>
-                                    </div>
+                    <div class="form-group">
+                        <label for="horaInicio">Hora de Início:</label>
+                        <input type="time" step="1" class="form-control" id="horaInicio" th:field="*{horainicio}" required>
+                    </div>
 
-                                    <div class="form-group">
-                                        <label for="horaFim">Hora de Fim:</label>
-                                        <input type="time" step="1" class="form-control" id="horaFim" name="horaFim" th:value="${agendamento.horafim}" required>
-                                    </div>
-
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary btnVoltar" data-dismiss="modal" >Fechar</button>
-                                        <button type="submit" class="btn btn-success btnFinalizar" >Finalizar</button>
-                                    </div>
-                                </div>
-                            </div>
+                    <div class="form-group">
+                        <label for="horaFim">Hora de Fim:</label>
+                        <input type="time" step="1" class="form-control" id="horaFim" th:field="*{horafim}" required>
                     </div>
                 </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btnVoltar" data-dismiss="modal" >Fechar</button>
+                <button type="submit" id="Finalizar" class="btn btn-success btnFinalizar">Finalizar</button>
+            </div>
+            </div>
             </form>
         </div>
     </div>
+</div>
 
 
+<!-- Modal de confirmação de cancelamento -->
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmDeleteModalLabel" style="font-weight: bold">Cancelar Agendamento</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Deseja realmente cancelar este agendamento?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <a href="" type="button" id="deleteButton" class="btn btn-danger">Cancelar Agendamento</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal de edição de agendamentos -->
+<div th:each="agendamento : ${agendamentos}">
+    <div class="modal fade" th:id="'modal-' + ${agendamento.idagendamento}">
+        <form th:action="@{'/editAgend/' + ${id} + '/' + ${agendamento.idagendamento}}" th:object="${agendamento}" method="post" id="formulario" onsubmit="return verificarHoras('formulario');">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" style="font-weight: bold">Editar Agendamento</h5>
+                        <button type="button" class="close" data-dismiss="modal">
+                            <span>&times;</span>
+                        </button>
+                    </div>
+                        <div class="modal-body">
+                            <div id="passo1">
+                                <div class="form-group">
+                                    <label for="embarcacao">Embarcação:</label>
+                                    <select class="form-control"  id="embarcacao" name="idembarcacao">
+                                        <option th:each="embarcacao : ${embarcacaos}" th:value="${embarcacao.idembarcacao}"
+                                                th:text="${embarcacao.nome}" th:selected="${embarcacao.idembarcacao == agendamento.idembarcacao}"></option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="data">Data:</label>
+                                    <input type="date" class="form-control" id="data" name="data" required th:pattern="yyyy-MM-dd" th:value="${agendamento.data}"/>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="horaInicio">Hora de Início:</label>
+                                    <input type="time" step="1" class="form-control" id="horaInicio" name="horaInicio" th:value="${agendamento.horainicio}" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="horaFim">Hora de Fim:</label>
+                                    <input type="time" step="1" class="form-control" id="horaFim" name="horaFim" th:value="${agendamento.horafim}" required>
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary btnVoltar" data-dismiss="modal" >Fechar</button>
+                                    <button type="submit"  class="btn btn-success btnFinalizar" >Finalizar</button>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </form>
+    </div>
 </div>
 
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
+<script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+
 <script>
     $(document).ready(function() {
         $('#toggleSidebar').click(function() {
@@ -518,30 +517,42 @@
     document.getElementById("data").min = tomorrowFormatted;
 </script>
 <script>
-    let horaInicioInput = document.getElementById('horaInicio');
-    let horaFimInput = document.getElementById('horaFim');
+    // Função para verificar a hora de início e fim no formulário
+    function verificarHoras(formId) {
+        var form = document.getElementById(formId);
+        var horaInicio = form.elements.horaInicio.value;
+        var horaFim = form.elements.horaFim.value;
 
-    function validateHoras() {
-        let horaInicio = horaInicioInput.value;
-        let horaFim = horaFimInput.value;
-
-        // Converter os valores para objetos Date
-        let inicio = new Date('2000-01-01 ' + horaInicio);
-        let fim = new Date('2000-01-01 ' + horaFim);
-
-        // Calcular a diferença em minutos
-        let diff = (fim.getTime() - inicio.getTime()) / 1000 / 60;
-
-        if (inicio >= fim) {
-            alert("A hora de início deve ser anterior à hora de fim!");
-            return false;
-        } else if (diff < 15) {
-            alert("A diferença entre a hora de início e a hora de fim deve ser de pelo menos 15 minutos!");
+        if (horaInicio > horaFim) {
+            alert('A hora de início não pode ser superior à hora de fim.');
             return false;
         } else {
-            return true;
+            var diffHoras = Math.abs(new Date('1970-01-01T' + horaFim) - new Date('1970-01-01T' + horaInicio)) / 36e5;
+            if (diffHoras < 0.5) {
+                alert('A diferença mínima entre as horas de início e fim deve ser de 30 minutos.');
+                return false;
+            }
         }
+        return true;
     }
+</script>
+<script>
+    document.getElementById('Finalizar').addEventListener('click', function(event) {
+        var horaInicio = document.getElementById('horaInicio').value;
+        var horaFim = document.getElementById('horaFim').value;
+
+        if (horaInicio > horaFim) {
+            alert('A hora de início não pode ser superior à hora de fim.');
+            event.preventDefault(); // Impede o envio do formulário
+        } else {
+            var diffHoras = Math.abs(new Date('1970-01-01T' + horaFim) - new Date('1970-01-01T' + horaInicio)) / 36e5;
+            if (diffHoras < 0.5) {
+                alert('A diferença mínima entre as horas de início e fim deve ser de 30 minutos.');
+                event.preventDefault(); // Impede o envio do formulário
+            }
+        }
+    });
+
 </script>
 <script>
     $('.table .delBtn').on('click', function(event) {
@@ -559,27 +570,74 @@
         $('#deleteExtra').modal();
     });
 </script>
-
 <script>
     function atualizarValorExtra() {
-        // Obtém o elemento select do campo "extra"
-        var selectExtra = document.getElementById('idextra');
+        var modal = event.target.closest('.modal');
+        var select = modal.querySelector('.form-control');
+        var selectedOption = select.options[select.selectedIndex];
+        var valorExtra = selectedOption.getAttribute('data-valor');
 
-        // Obtém o valor selecionado no campo "extra"
-        var valorSelecionado = selectExtra.options[selectExtra.selectedIndex].getAttribute('data-valor');
+        modal.querySelector('.valorExtraAtual').textContent = valorExtra;
 
-        valorExtraAtual.textContent = valorSelecionado;
+        var qtd = parseInt(modal.querySelector('.form-control#qtd').value);
+        var valorTotal = qtd * parseFloat(valorExtra);
 
-        // Obtém o valor da quantidade
-        var quantidade = parseInt(document.getElementById('qtd').value);
-
-        // Calcula o valor total
-        var valorTotal = parseFloat(valorSelecionado) * quantidade;
-
-        // Atualiza o conteúdo do campo "valorTotal"
-        document.getElementById('valorextra').value = valorTotal.toFixed(2);
+        modal.querySelector('.valorextra').value = valorTotal.toFixed(2);
     }
-
 </script>
+<script>
+    $(document).ready(function() {
+        var registrosPorPagina = 12;  // Defina o número de registros por página
+        var $tabela = $('#faturasTable');
+        var $tbody = $tabela.find('tbody');
+        var $linhas = $tbody.find('tr');
+        var totalRegistros = $linhas.length;
+        var totalPaginas = Math.ceil(totalRegistros / registrosPorPagina);
+        var paginaAtual = 1;
+
+        exibirPagina(paginaAtual);
+        verificarPaginaAtual();
+
+        function exibirPagina(pagina) {
+            var inicio = (pagina - 1) * registrosPorPagina;
+            var fim = inicio + registrosPorPagina;
+
+            $linhas.hide();
+            $linhas.slice(inicio, fim).show();
+        }
+
+        function verificarPaginaAtual() {
+            if (paginaAtual === 1) {
+                $('#paginaAnterior').hide();
+            } else {
+                $('#paginaAnterior').show();
+            }
+
+            if (paginaAtual === totalPaginas || totalPaginas === 0) {
+                $('#proximaPagina').hide();
+            } else {
+                $('#proximaPagina').show();
+            }
+        }
+
+        $('#paginaAnterior').click(function() {
+            if (paginaAtual > 1) {
+                paginaAtual--;
+                exibirPagina(paginaAtual);
+                verificarPaginaAtual();
+            }
+        });
+
+        $('#proximaPagina').click(function() {
+            if (paginaAtual < totalPaginas) {
+                paginaAtual++;
+                exibirPagina(paginaAtual);
+                verificarPaginaAtual();
+            }
+        });
+    });
+</script>
+
+
 </body>
 </html>

@@ -159,7 +159,15 @@
         }
         .increased-column-spacing th,
         .increased-column-spacing td {
-            padding-right: 50px; /* Ajusta o valor conforme necessário */
+            padding-right: 30px; /* Ajusta o valor conforme necessário */
+        }
+        .pago-cell {
+            font-weight: bold;
+            color: green;
+        }
+        .outro-estado-cell {
+            font-weight: bold;
+            color: red;
         }
     </style>
 </head>
@@ -205,8 +213,8 @@
 </div>
 
 <div class="content" style="background-color: white; margin-top: 75px; margin-right: 40px; border-radius: 10px;">
-    <h1 class="text-center mb-1" style="margin-bottom: 50px; font-weight: bold" >As Minhas Faturas</h1>
-    <table class="table increased-column-spacing" style="margin-top: 100px">
+    <h1 class="text-center mb-1" style="margin-bottom: 10px; font-weight: bold" >As Minhas Faturas</h1>
+    <table class="table increased-column-spacing" id="faturasTable" style="margin-top: 30px">
         <thead>
         <tr  style="background-color: #29296b; color: white">
             <th>Data de criação</th>
@@ -229,11 +237,13 @@
             <td  th:text="${fatura.valortotal}"></td>
             <td  th:text="${fatura.numfiscal}"></td>
             <td  th:text="${fatura.getListaEstadoFaturasByIdfatura()
-                 [fatura.getListaEstadoFaturasByIdfatura().size()-1].getEstadoPagamentoByIdestado().getEstado()}"></td>
+                 [0].getEstadoPagamentoByIdestado().getEstado()}" th:class="${fatura.getListaEstadoFaturasByIdfatura()
+                 [0].getEstadoPagamentoByIdestado().getEstado() == 'Paga'} ? 'pago-cell': 'outro-estado-cell'"></td>
         </tr>
         </tbody>
     </table>
-
+    <a style="color: white" class="btn btn-primary" id="paginaAnterior">Anterior</a>
+    <a style="color: white" class="btn btn-primary" id="proximaPagina">Próxima</a>
 </div>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
@@ -244,5 +254,58 @@
         });
     });
 </script>
+<script>
+    $(document).ready(function() {
+        var registrosPorPagina = 12;  // Defina o número de registros por página
+        var $tabela = $('#faturasTable');
+        var $tbody = $tabela.find('tbody');
+        var $linhas = $tbody.find('tr');
+        var totalRegistros = $linhas.length;
+        var totalPaginas = Math.ceil(totalRegistros / registrosPorPagina);
+        var paginaAtual = 1;
+
+        exibirPagina(paginaAtual);
+        verificarPaginaAtual();
+
+        function exibirPagina(pagina) {
+            var inicio = (pagina - 1) * registrosPorPagina;
+            var fim = inicio + registrosPorPagina;
+
+            $linhas.hide();
+            $linhas.slice(inicio, fim).show();
+        }
+
+        function verificarPaginaAtual() {
+            if (paginaAtual === 1) {
+                $('#paginaAnterior').hide();
+            } else {
+                $('#paginaAnterior').show();
+            }
+
+            if (paginaAtual === totalPaginas || totalPaginas === 0) {
+                $('#proximaPagina').hide();
+            } else {
+                $('#proximaPagina').show();
+            }
+        }
+
+        $('#paginaAnterior').click(function() {
+            if (paginaAtual > 1) {
+                paginaAtual--;
+                exibirPagina(paginaAtual);
+                verificarPaginaAtual();
+            }
+        });
+
+        $('#proximaPagina').click(function() {
+            if (paginaAtual < totalPaginas) {
+                paginaAtual++;
+                exibirPagina(paginaAtual);
+                verificarPaginaAtual();
+            }
+        });
+    });
+</script>
+
 </body>
 </html>
